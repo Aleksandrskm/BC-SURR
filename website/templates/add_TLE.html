@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>Получить TLE из файла</h2>
+
+
+    <div class="input_parameters_TLE">
+        <div class="row_TLE">
+
+            <div class="column1_TLE">
+                <label class="input-file_TLE">
+                   
+                
+                <input id="get_TLE" accept=".txt" type="file">
+                <span class="input-file-btn">Выберите файл</span>           
+                <div class="input-file-text">Выберите txt файл содержащий данные TLE</div>
+                </label>
+                
+                         
+                
+            </div>
+
+            <div class="column2_TLE">
+                
+            </div>
+
+        </div>
+
+        <div class="btn2">
+            <button id="task-btn-TLE" >Отправить TLE</button>
+        </div>
+
+       
+    </div>
+{% endblock %}
