@@ -148,7 +148,41 @@ function readLinesValue(fileReader) {
   arrClassTlEs.push(tle);
   console.log(arrClassTlEs);
   console.log(arrTLE);
-  document.querySelector('.column2_TLE').innerHTML=JSON.stringify(arrClassTlEs);
+  // document.querySelector('.column2_TLE').innerHTML=JSON.stringify(arrClassTlEs);
+  
+  document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
+  document.querySelector('.column2_TLE').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
+  <br>${new Date().toLocaleString()}</span>`;
+  document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
+             font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
+  // for (let datasTle of arrClassTlEs) {
+  //   document.querySelector('.column2_TLE').innerHTML+=`<br>`;
+  //   document.querySelector('.column2_TLE').innerHTML+=`<span style="
+  //           font-size: calc(1.2rem);">Полученные данные:</span>`
+  //   for(let fieldTLE in datasTle)
+  //   {
+  //     document.querySelector('.column2_TLE').innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
+  //   }
+  // }
+  
+
+  document.querySelector('.information_request').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
+  document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
+  <br>${new Date().toLocaleString()}</span>`;
+   document.querySelector('.information_request').innerHTML+=`<br><span style="
+             font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
+  // for (let datasTle of arrClassTlEs) {
+  //   document.querySelector('.information_request').innerHTML+=`<br>`;
+  //   document.querySelector('.information_request').innerHTML+=`<span style="
+  //           font-size: calc(1.2rem);">Полученные данные:</span>`
+  //   for(let fieldTLE in datasTle)
+  //   for(let fieldTLE in datasTle)
+  //   {
+     
+  //     document.querySelector('.information_request').innerHTML+=`<div>${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
+  //   }
+  // }
+  // document.querySelector('.information_request').innerHTML+=`<div>Полученные данные:${JSON.stringify(arrClassTlEs)}</div>`;
 }
 // example usage: realtime clock
 setInterval(function(){
@@ -721,7 +755,8 @@ document.addEventListener('DOMContentLoaded',function(){
               // }
               readLinesValue(reader.result);
               console.log(document.getElementById('get_TLE').files[0].name);
-              document.querySelector('.input-file-text').innerHTML=document.getElementById('get_TLE').files[0].name;
+              document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLE').files[0].name}`;
+              
               // для разделения, если выбрано несколько файлов
               console.log("==============================");
               // console.log(jsonTLE);
