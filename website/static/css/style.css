@@ -101,8 +101,11 @@
 	margin: 0;
 	transition: background-color 0.2s;
 }
+.row_TLE{
+    text-align: center;
+}
 .input-file-text {
-    font-size: calc(1rem);
+    font-size: calc(1.1rem);
     /* font-weight: bold; */
     font-family: Arial, sans-serif;
 	padding: 0 10px;
