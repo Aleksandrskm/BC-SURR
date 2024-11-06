@@ -2,35 +2,41 @@
 
 {% block content %}
 
-    <h2>Получить TLE из файла</h2>
+    <h2>Сформировать данные БЦ для СУРР</h2>
 
-
-    <div class="input_parameters_TLE">
-        <div class="row_TLE">
-
-            <div class="column1_TLE">
-                <label class="input-file_TLE">
-                   
-                
-                <input id="get_TLE" accept=".txt" type="file">
-                <span class="input-file-btn">Выберите файл</span>           
-                <div class="input-file-text">Выберите txt файл содержащий данные TLE</div>
-                </label>
-                
+    <div class="content">
+        <div class="input_parameters_TLE">
+            <div class="row_TLE">
+    
+                <div class="column1_TLE">
+                    <label class="input-file_TLE">
+                        <div class="bc">Эмулятор БЦ</div>
+                        <br>        
+                        <div class="div-abonent">Формирование данных орбит КА</div>
+                        <br>    
+                    
+                    <input id="get_TLE" accept=".txt" type="file">
+                    <div class="input-file-text">Выберите файл содержащий данные TLE</div>
+                    <span class="input-file-btn">Выберите файл</span>           
+                    
+                    </label>
+                    
                          
+                    
+                </div>
+              
+                <div class="column2_TLE">
+                    
+                </div>
                 
             </div>
-
-            <div class="column2_TLE">
-                
-            </div>
-
+            <div class="btn2">
+                <button id="task-btn-TLE" >Отправить данные на СУРР</button>
+            </div>  
         </div>
-
-        <div class="btn2">
-            <button id="task-btn-TLE" >Отправить TLE</button>
+        <div class="information_request">
+            <span class="bc">Шлюз взаимодействия БЦ-СУРР</span>
         </div>
-
-       
     </div>
+    
 {% endblock %}

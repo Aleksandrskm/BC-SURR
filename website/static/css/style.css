@@ -44,19 +44,23 @@
     font-family: Arial, sans-serif;  
 }
 .input_parameters_TLE{
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    margin: 0;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 15px 15px;
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 #task-btn-TLE{
     margin-bottom: 10px;
     margin-top: 10px;
     padding: 6px;
     text-align: center;
-    width: 150px;
+    width: 250px;
     border-radius: 6px;
     border-width: 2px;
     font-size: calc(1rem);
@@ -258,7 +262,9 @@ img {
     justify-content: center;
     align-items: center;
 }
-
+.header-log{
+    font-size: calc(1.2rem);
+}
 .input_parameters_az button {
     margin-bottom: 0px;
     margin-top: 4px;
@@ -302,6 +308,13 @@ img {
     /* max-height: 800px; */
 }
 .information_request div {
+    text-align: left;
+    margin: 3px 0;
+    font-size: calc(1.0rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+.column2_TLE div {
     text-align: left;
     margin: 3px 0;
     font-size: calc(1.0rem);
@@ -646,7 +659,7 @@ body {
 .radio-dvi input{
     width: 13px;
 }
-.csus{
+.bc{
     font-size: calc(1.5rem);
     text-align: center; 
 }
