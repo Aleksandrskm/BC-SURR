@@ -149,16 +149,21 @@ function readLinesValue(fileReader) {
   console.log(arrClassTlEs);
   console.log(arrTLE);
   // document.querySelector('.column2_TLE').innerHTML=JSON.stringify(arrClassTlEs);
+ 
+  // document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
+  let nameFile=document.createElement('span');
+  document.querySelector('.name-document').innerHTML='';
+  nameFile.classList.add('header-log');
+  nameFile.innerHTML=`Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
+  ${new Date().toLocaleString()}`;
+  document.querySelector('.name-document').append(nameFile);
+  
   for(let i=0;i<arrClassTlEs.length;i++){
     arrClassTlEs[i].Data_beg=String(new Date().toISOString());
     arrClassTlEs[i].Data_end='';
     arrClassTlEs[i].ID=i+1;
     
   }
-  // document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
-  document.querySelector('.column2_TLE').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
-  <br>${new Date().toLocaleString()}</span>`;
- 
   // document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
   //            font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
   for (let datasTle of arrClassTlEs) {
@@ -169,8 +174,9 @@ function readLinesValue(fileReader) {
     for(let fieldTLE in datasTle)
     {
       logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-      document.querySelector('.column2_TLE').append(logIn);
+     
     }
+    document.querySelector('.column2_TLE').append(logIn);
   }
   
 
@@ -785,7 +791,6 @@ document.addEventListener('DOMContentLoaded',function(){
   }
   document.getElementById("get_TLE").addEventListener("change", printFiles);
   document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
-  console.log(arr);
   }
 })
 
