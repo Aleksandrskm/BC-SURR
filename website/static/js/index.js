@@ -59,13 +59,13 @@ class Loader {
 }
 class dataTle
 {
-  constructor(ID,Naim,Active,TLE_Classification,TLE_Name,TLE_International_class1,TLE_International_class2,TLE_Epoch_year,TLE_Epoch_Time,TLE_Element_Version
+  constructor(ID,Naim,Naim_Rus,TLE_Classification,TLE_Name,TLE_International_class1,TLE_International_class2,TLE_Epoch_year,TLE_Epoch_Time,TLE_Element_Version
     ,TLE_Nomer_vitka,TLE_line1,TLE_Control_sum_line1,Data_beg,Data_end,TLE_Perv_Proizv,TLE_Vtor_Proizv,TLE_Koef_torm,TLE_Naklon,TLE_Dolgota_uzla,TLE_Ecscentr,
     TLE_Pericentr,TLE_Mean_Anomaly,TLE_Mean_Motion,TLE_line2,TLE_Control_sum_line2
   ){
       this.ID=ID;
       this.Naim=Naim;
-      this.Active=Active;
+      this.Naim_Rus=Naim_Rus;
       this.TLE_Classification=TLE_Classification;
       this.TLE_Name=TLE_Name;
       this.TLE_International_class1=TLE_International_class1;
@@ -149,10 +149,21 @@ function readLinesValue(fileReader) {
   console.log(arrClassTlEs);
   console.log(arrTLE);
   // document.querySelector('.column2_TLE').innerHTML=JSON.stringify(arrClassTlEs);
+ 
+  // document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
+  let nameFile=document.createElement('span');
+  document.querySelector('.name-document').innerHTML='';
+  nameFile.classList.add('header-log');
+  nameFile.innerHTML=`Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
+  ${new Date().toLocaleString()}`;
+  document.querySelector('.name-document').append(nameFile);
   
-  document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
-  document.querySelector('.column2_TLE').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
-  <br>${new Date().toLocaleString()}</span>`;
+  for(let i=0;i<arrClassTlEs.length;i++){
+    arrClassTlEs[i].Data_beg=String(new Date().toISOString());
+    arrClassTlEs[i].Data_end='';
+    arrClassTlEs[i].ID=i+1;
+    
+  }
   // document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
   //            font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
   for (let datasTle of arrClassTlEs) {
@@ -163,24 +174,26 @@ function readLinesValue(fileReader) {
     for(let fieldTLE in datasTle)
     {
       logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-      document.querySelector('.column2_TLE').append(logIn);
+     
     }
+    document.querySelector('.column2_TLE').append(logIn);
   }
   
 
-  document.querySelector('.information_request').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
-  document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
-  <br>${new Date().toLocaleString()}</span>`;
-  for (let datasTle of arrClassTlEs) {
-    const logIn=document.createElement('div');
-    logIn.innerHTML+=`<br>`;
-    logIn.innerHTML+=`<span style="font-size: calc(1.2rem);">Полученные данные:</span>`
-      for(let fieldTLE in datasTle)
-      {
-        logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-        document.querySelector('.information_request').append(logIn);
-      }
-  }
+  // document.querySelector('.information_request').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
+  // document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
+  // <br>${new Date().toLocaleString()}</span>`;
+  // for (let datasTle of arrClassTlEs) {
+  //   const logIn=document.createElement('div');
+  //   logIn.innerHTML+=`<br>`;
+  //   logIn.innerHTML+=`<span style="font-size: calc(1.2rem);">Полученные данные:</span>`
+  //     for(let fieldTLE in datasTle)
+  //     {
+  //       logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
+  //       document.querySelector('.information_request').append(logIn);
+  //     }
+  // }
+  return arrClassTlEs
   // document.querySelector('.information_request').innerHTML+=`<div>Полученные данные:${JSON.stringify(arrClassTlEs)}</div>`;
 }
 // example usage: realtime clock
@@ -212,10 +225,13 @@ function processLine(line,count_line,jsonTLE,tle) {
   dataTLE=line;
   let element='';
   let counter=0;
+  
   if (count_line==0) {
     jsonTLE['TLE_Name']=dataTLE;
     tle.TLE_Name=dataTLE;
     tle.Naim=dataTLE;
+   
+    tle.Naim_Rus= dataTLE.replace('GONETS','Гонец')
   }
   else if (count_line==1) {
     jsonTLE['TLE_line1']=dataTLE;
@@ -571,7 +587,12 @@ function processLine(line,count_line,jsonTLE,tle) {
   
  
 }
+function eventSend(){
+  console.log(arr);
+}
+let arr='1';
 document.addEventListener('DOMContentLoaded',function(){
+  
   if (!document.querySelector('.task-btn-TLE')) {
     function printFiles(e) {  
       const files = e.target.files;   // получаем все выбранные файлы
@@ -580,6 +601,7 @@ document.addEventListener('DOMContentLoaded',function(){
         const reader = new FileReader();
         // console.log(arrTLENames[7]);
         // console.log(reader);
+        
         // при успешном чтении файла выводим его содержимое на веб-страницу
         reader.onload = () => {  
               // выводим содержимое
@@ -752,7 +774,7 @@ document.addEventListener('DOMContentLoaded',function(){
               //   }
                 
               // }
-              readLinesValue(reader.result);
+              arr= readLinesValue(reader.result);
               console.log(document.getElementById('get_TLE').files[0].name);
               document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLE').files[0].name}`;
               
@@ -761,11 +783,14 @@ document.addEventListener('DOMContentLoaded',function(){
               // console.log(jsonTLE);
               // console.log(JSON.stringify(jsonTLE));
         };
-        reader.readAsText(file);       
+       
+        reader.readAsText(file); 
+          
         // считываем файл   
       }
   }
   document.getElementById("get_TLE").addEventListener("change", printFiles);
+  document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
   }
 })
 
