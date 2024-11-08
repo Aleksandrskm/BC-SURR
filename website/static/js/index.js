@@ -59,17 +59,17 @@ class Loader {
 }
 class dataTle
 {
-  constructor(ID,Naim,Naim_Rus,TLE_Classification,TLE_Name,TLE_International_class1,TLE_International_class2,TLE_Epoch_year,TLE_Epoch_Time,TLE_Element_Version
+  constructor(ID,Naim,Naim_Rus,Kod_NORAD,TLE_Classification,TLE_Name,TLE_International_class,TLE_Epoch_year,TLE_Epoch_Time,TLE_Element_Version
     ,TLE_Nomer_vitka,TLE_line1,TLE_Control_sum_line1,Data_beg,Data_end,TLE_Perv_Proizv,TLE_Vtor_Proizv,TLE_Koef_torm,TLE_Naklon,TLE_Dolgota_uzla,TLE_Ecscentr,
-    TLE_Pericentr,TLE_Mean_Anomaly,TLE_Mean_Motion,TLE_line2,TLE_Control_sum_line2
+    TLE_Pericentr,TLE_Mean_Anomaly,TLE_Mean_Motion,TLE_line2,TLE_Control_sum_line2,Data
   ){
       this.ID=ID;
       this.Naim=Naim;
       this.Naim_Rus=Naim_Rus;
+      this.Kod_NORAD=Kod_NORAD;
       this.TLE_Classification=TLE_Classification;
       this.TLE_Name=TLE_Name;
-      this.TLE_International_class1=TLE_International_class1;
-      this.TLE_International_class2=TLE_International_class2;
+      this.TLE_International_class=TLE_International_class;
       this.TLE_Epoch_year=TLE_Epoch_year;
       this.TLE_Epoch_Time=TLE_Epoch_Time;
       this.TLE_Element_Version=TLE_Element_Version;
@@ -89,6 +89,7 @@ class dataTle
       this.TLE_Mean_Motion=TLE_Mean_Motion;
       this.TLE_line2=TLE_line2;
       this.TLE_Control_sum_line2=TLE_Control_sum_line2;
+      this.Data=Data;
   }
 }
 function getRandomNumber(min, max) {
@@ -161,6 +162,7 @@ function readLinesValue(fileReader) {
   for(let i=0;i<arrClassTlEs.length;i++){
     arrClassTlEs[i].Data_beg=String(new Date().toISOString());
     arrClassTlEs[i].Data_end='';
+    arrClassTlEs[i].Data='';
     arrClassTlEs[i].ID=i+1;
     
   }
@@ -246,9 +248,10 @@ function processLine(line,count_line,jsonTLE,tle) {
       }
       else if (i>1 && i<7) {
         if (i==6) {
-
+          
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
+          tle.Kod_NORAD=+element;
           jsonTLE[nameField]=+element;
           element='';
           counter+=1;
@@ -265,12 +268,12 @@ function processLine(line,count_line,jsonTLE,tle) {
         element='';
         counter+=1;
       } 
-      else if (i>7 && i<11) {
-        if (i==10) {
+      else if (i>7 && i<15) {
+        if (i==14) {
           element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=Number(element);
-        tle.TLE_International_class1=Number(element);
+        tle.TLE_International_class=(element);
         element='';
         counter+=1;
         }
@@ -290,19 +293,19 @@ function processLine(line,count_line,jsonTLE,tle) {
       //     element+=dataTLE[i];
       //   }
       // }
-      else if (i>10 && i<15) {
-        if (i==14) {
-          element+=dataTLE[i];
-        const nameField=arrTLENames[counter];
-        jsonTLE[nameField]=element;
-        tle.TLE_International_class2=element;
-        element='';
-        counter+=1;
-        }
-        else{
-          element+=dataTLE[i];
-        }
-      }
+      // else if (i>10 && i<15) {
+      //   if (i==14) {
+      //     element+=dataTLE[i];
+      //   const nameField=arrTLENames[counter];
+      //   jsonTLE[nameField]=element;
+      //   tle.TLE_International_class2=element;
+      //   element='';
+      //   counter+=1;
+      //   }
+      //   else{
+      //     element+=dataTLE[i];
+      //   }
+      // }
       else if (i>17 && i<20) {
         if (i==19) {
           element+=dataTLE[i];
