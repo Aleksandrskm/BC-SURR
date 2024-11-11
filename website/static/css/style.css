@@ -107,6 +107,9 @@
 .name-document{
     margin-top: 10px;
 }
+label{
+    font-size: calc(1.2rem);
+}
 .input-file-text {
     font-size: calc(1.1rem);
     /* font-weight: bold; */
@@ -653,6 +656,8 @@ body {
 }
 
 .btn2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;

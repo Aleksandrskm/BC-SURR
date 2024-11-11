@@ -124,6 +124,27 @@ function getDateTime() {
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
+function readLines(fileReader) {
+
+  const arrTLE=[];
+  // console.log(fileReader);
+  console.log(fileReader)
+  const lines = (fileReader).split("\r\n");
+  
+  let count_line=0;
+  for (const line of lines) {
+    let lineTle=document.createElement('div');
+    if (count_line==3) {
+      count_line=0
+      lineTle.innerHTML+=`<br>`
+    }
+   
+    lineTle.innerHTML+=`${line}`
+    document.querySelector('.column2_TLE').append(lineTle);
+    arrTLE.push(line);
+    count_line++;
+  }
+}
 function readLinesValue(fileReader) {
   let tle= new dataTle();
   let jsonTLE={};
@@ -155,7 +176,7 @@ function readLinesValue(fileReader) {
   let nameFile=document.createElement('span');
   document.querySelector('.name-document').innerHTML='';
   nameFile.classList.add('header-log');
-  nameFile.innerHTML=`Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
+  nameFile.innerHTML=`Файл: ${document.getElementById('get_TLE').files[0].name} 
   ${new Date().toLocaleString()}`;
   document.querySelector('.name-document').append(nameFile);
   
@@ -171,8 +192,6 @@ function readLinesValue(fileReader) {
   for (let datasTle of arrClassTlEs) {
     const logIn=document.createElement('div');
     logIn.innerHTML+=`<br>`;
-    logIn.innerHTML+=`<span style="
-            font-size: calc(1.2rem);">Полученные данные:</span>`
     for(let fieldTLE in datasTle)
     {
       logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
@@ -792,6 +811,35 @@ document.addEventListener('DOMContentLoaded',function(){
         // считываем файл   
       }
   }
+  function printFilesTle(e) {  
+    const files = e.target.files;   // получаем все выбранные файлы
+    for (let file of files) {        // Перебираем все выбранные файлы 
+      // создаем объект FileReader для считывания файла
+      const reader = new FileReader();
+      // console.log(arrTLENames[7]);
+      // console.log(reader);
+      
+      // при успешном чтении файла выводим его содержимое на веб-страницу
+      reader.onload = () => {  
+            
+            console.log(document.getElementById('view_TLE').files[0].name);
+            document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('view_TLE').files[0].name}`;
+            readLines(reader.result);
+            // для разделения, если выбрано несколько файлов
+            console.log("==============================");
+            // console.log(jsonTLE);
+            // console.log(JSON.stringify(jsonTLE));
+      };
+     
+      reader.readAsText(file); 
+        
+      // считываем файл   
+    }
+}
+if (document.getElementById("view_TLE")) {
+  document.getElementById("view_TLE").addEventListener("change", printFilesTle);
+}
+  
   document.getElementById("get_TLE").addEventListener("change", printFiles);
   document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
   }
