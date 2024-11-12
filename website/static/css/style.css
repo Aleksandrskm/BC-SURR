@@ -44,9 +44,13 @@
     font-family: Arial, sans-serif;  
 }
 .input_parameters_TLE{
+    
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
     justify-content: space-between;
     max-width: 900px;
     margin: 15px 15px;
@@ -78,6 +82,19 @@
     max-height: 500px;
     overflow: auto;
 }
+.column2_TLE-view{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* max-width: 600px; */
+    max-height: 500px;
+    overflow: auto;  
+}
+.column2_TLE-view textarea{
+    min-height: 20px;
+    min-width: 100px;
+}
 .input-file-btn {
     font-size: calc(1rem);
     font-weight: bold;
@@ -100,6 +117,18 @@
 	border: none;
 	margin: 0;
 	transition: background-color 0.2s;
+}
+#download-tle{
+    height: 40px;
+    margin-left: 15px;
+    padding: 6px;
+    text-align: center;
+    /* width: 130px; */
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif
 }
 .row_TLE{
     text-align: center;
@@ -640,7 +669,7 @@ body {
 .butt button:hover {
     background-color: #C0C0C0;
 }
-#task-btn_sim:hover{
+#download-tle:hover{
     background-color: #C0C0C0; 
 }
 #task-btn_cansel:hover {
@@ -809,7 +838,7 @@ body {
 }
 .btn:hover, #task-btn_sim_flow, #task-btn_cansel_flow,
 #task-btn_cansel:hover,
-#task-btn_sim:hover{
+#task-btn_sim:hover,#download-tle{
     cursor:pointer;
 }
 
