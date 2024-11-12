@@ -74,7 +74,7 @@
 .column2_TLE{
     margin-top: 20px;
     margin-bottom: 20px;
-    max-width: 600px;
+    /* max-width: 600px; */
     max-height: 500px;
     overflow: auto;
 }
@@ -106,6 +106,9 @@
 }
 .name-document{
     margin-top: 10px;
+}
+label{
+    font-size: calc(1.2rem);
 }
 .input-file-text {
     font-size: calc(1.1rem);
@@ -653,6 +656,8 @@ body {
 }
 
 .btn2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
