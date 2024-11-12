@@ -125,7 +125,7 @@ function getDateTime() {
    return dateTime;
 }
 function readLines(fileReader) {
-
+  document.querySelector('.column2_TLE-view').innerHTML=``;
   const arrTLE=[];
   // console.log(fileReader);
   // console.log(fileReader)
@@ -142,8 +142,7 @@ function readLines(fileReader) {
   let lineTle=document.createElement('textarea');
   lineTle.innerHTML+=`${arrTLE[i]}`;
   console.log(arrTLE[i])
-    document.querySelector('.column2_TLE-view').append(lineTle);
-    
+    document.querySelector('.column2_TLE-view').append(lineTle);  
  }
     
     
