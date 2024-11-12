@@ -74,7 +74,7 @@
 .column2_TLE{
     margin-top: 20px;
     margin-bottom: 20px;
-    max-width: 600px;
+    /* max-width: 600px; */
     max-height: 500px;
     overflow: auto;
 }
