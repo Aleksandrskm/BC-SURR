@@ -128,22 +128,27 @@ function readLines(fileReader) {
 
   const arrTLE=[];
   // console.log(fileReader);
-  console.log(fileReader)
+  // console.log(fileReader)
   const lines = (fileReader).split("\r\n");
-  
+ 
   let count_line=0;
   for (const line of lines) {
-    let lineTle=document.createElement('div');
-    if (count_line==3) {
-      count_line=0
-      lineTle.innerHTML+=`<br>`
-    }
-   
-    lineTle.innerHTML+=`${line}`
-    document.querySelector('.column2_TLE').append(lineTle);
     arrTLE.push(line);
     count_line++;
   }
+  count_line=0;
+
+ for(let i=0;i<arrTLE.length;i++){
+  let lineTle=document.createElement('textarea');
+  lineTle.innerHTML+=`${arrTLE[i]}`;
+  console.log(arrTLE[i])
+    document.querySelector('.column2_TLE-view').append(lineTle);
+    
+ }
+    
+    
+  
+  console.log(arrTLE)
 }
 function readLinesValue(fileReader) {
   let tle= new dataTle();
@@ -827,6 +832,7 @@ document.addEventListener('DOMContentLoaded',function(){
             readLines(reader.result);
             // для разделения, если выбрано несколько файлов
             console.log("==============================");
+            document.getElementById('download-tle').disabled = false;
             // console.log(jsonTLE);
             // console.log(JSON.stringify(jsonTLE));
       };
@@ -838,6 +844,26 @@ document.addEventListener('DOMContentLoaded',function(){
 }
 if (document.getElementById("view_TLE")) {
   document.getElementById("view_TLE").addEventListener("change", printFilesTle);
+  
+  document.getElementById('download-tle').disabled = true
+  document.getElementById('download-tle').addEventListener('click',()=>{
+    const arrBlob=[];
+          let indexBlob=0;
+           document.querySelectorAll('textarea').forEach(lineTle=>{
+            console.log(lineTle.value);
+            indexBlob++;
+            if (indexBlob==document.querySelectorAll('textarea').length) {
+              arrBlob.push(`${String(lineTle.value)}`)
+            }
+            else{
+              arrBlob.push(`${String(lineTle.value)}\r\n`)
+            }
+           })
+           let blob = new Blob(arrBlob, {type: 'text/plain'});
+           const link=document.getElementById('link')
+           link.href = URL.createObjectURL(blob);
+           console.log(blob)
+  })
 }
   
   document.getElementById("get_TLE").addEventListener("change", printFiles);
