@@ -122,9 +122,9 @@ function getDateTime() {
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
-function showBegLogRequest(arrClassTlEs){
-document.querySelector('.information_request').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
-  document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Файл: ${document.getElementById('get_TLE').files[0].name} 
+function showBegLogRequest(arrClassTlEs,selector){
+document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
+  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Файл: ${document.getElementById('get_TLE').files[0].name} 
   <br>${new Date().toLocaleString()}</span>`;
   for (let datasTle of arrClassTlEs) {
     const logIn=document.createElement('div');
@@ -132,20 +132,20 @@ document.querySelector('.information_request').innerHTML+=`<br><span class='head
       for(let fieldTLE in datasTle)
       {
         logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-        document.querySelector('.information_request').append(logIn);
+        document.querySelector(`${selector}`).append(logIn);
       }
      
   }
-  document.querySelector('.information_request').innerHTML+=`<br><div>Время отправки запроса: ${new Date().toLocaleString()}</div>`;
+  document.querySelector(`${selector}`).innerHTML+=`<br><div>Время отправки запроса: ${new Date().toLocaleString()}</div>`;
 }
-function showEndLogRequest(){
+function showEndLogRequest(selector){
   const logIn=document.createElement('div');
   logIn.innerHTML+=`<br>`;
   logIn.innerHTML+=`<span style="font-size: calc(1.2rem);">Завершение сеанса:</span>`
-  document.querySelector('.information_request').append(logIn);
-  document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Время ответа: 
+  document.querySelector(`${selector}`).append(logIn);
+  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Время ответа: 
   <br>${new Date().toLocaleString()}</span>`;
-  document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Данные успешно добавленны</span>`
+  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Данные успешно добавленны</span>`
 
 }
 function readLines(fileReader) {
@@ -215,18 +215,26 @@ function readLinesValue(fileReader) {
   }
   // document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
   //            font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
-  for (let datasTle of arrClassTlEs) {
-    const logIn=document.createElement('div');
-    logIn.innerHTML+=`<br>`;
-    for(let fieldTLE in datasTle)
-    {
-      logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
+  // for (let datasTle of arrClassTlEs) {
+  //   const logIn=document.createElement('div');
+  //   logIn.innerHTML+=`<br>`;
+  //   for(let fieldTLE in datasTle)
+  //   {
+  //     logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
      
-    }
-    document.querySelector('.column2_TLE').append(logIn);
-  }
+  //   }
+  //   document.querySelector('.column2_TLE').append(logIn);
+  // }
+  const dataDocument=document.createElement('div');
+  dataDocument.classList.add('data-doc');
+  arrClassTlEs.forEach(tle=>{
+    dataDocument.innerHTML+=`<div>${tle.NAIM}</div>`;
+    dataDocument.innerHTML+=`<div>${tle.TLE_LINE1}</div>`;
+    dataDocument.innerHTML+=`<div>${tle.TLE_LINE2}</div>`;
+    dataDocument.innerHTML+=`<br>`;
+  })
   
-
+  document.querySelector('.name-document').append(dataDocument);
   
   return arrClassTlEs
   // document.querySelector('.information_request').innerHTML+=`<div>Полученные данные:${JSON.stringify(arrClassTlEs)}</div>`;
@@ -643,11 +651,14 @@ async function postKA(data){
 function eventSend(){
 postKA(arr)
 .then(()=>{
-  showBegLogRequest(arr);
-  showEndLogRequest();
+  showBegLogRequest(arr,'.information_request');
+  showBegLogRequest(arr,'.column2_TLE');
+  showEndLogRequest('.information_request');
+  showEndLogRequest('.column2_TLE');
+  document.getElementById('task-btn-TLE').disabled=true;
 })
 }
-let arr='1';
+let arr=[];
 document.addEventListener('DOMContentLoaded',function(){
   
   if (!document.querySelector('.task-btn-TLE')) {
@@ -898,7 +909,7 @@ if (document.getElementById("view_TLE")) {
   if ( document.getElementById("get_TLE")) {
     document.getElementById('task-btn-TLE').disabled=true;
     document.getElementById("get_TLE").addEventListener("change", printFiles);
-  document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
+    document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
   }
   
   }
