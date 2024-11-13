@@ -59,37 +59,35 @@ class Loader {
 }
 class dataTle
 {
-  constructor(ID,Naim,Naim_Rus,Kod_NORAD,TLE_Classification,TLE_Name,TLE_International_class,TLE_Epoch_year,TLE_Epoch_Time,TLE_Element_Version
-    ,TLE_Nomer_vitka,TLE_line1,TLE_Control_sum_line1,Data_beg,Data_end,TLE_Perv_Proizv,TLE_Vtor_Proizv,TLE_Koef_torm,TLE_Naklon,TLE_Dolgota_uzla,TLE_Ecscentr,
-    TLE_Pericentr,TLE_Mean_Anomaly,TLE_Mean_Motion,TLE_line2,TLE_Control_sum_line2,Data
+  constructor(ID,NAIM,NAIM_RUS,KOD_NORAD,TLE_CLASSIFICATION,TLE_NAME,TLE_INTERNATIONAL_CLASS,TLE_EPOCH_YEAR,TLE_EPOCH_TIME,TLE_ELEMENT_VERSION
+    ,TLE_NOMER_VITKA,TLE_LINE1,TLE_CONTROL_SUM_LINE1,DATA_BEG,TLE_PERV_PROIZV,TLE_VTOR_PROIZV,TLE_KOEF_TORM,TLE_NAKLON,TLE_DOLGOTA_UZLA,TLE_ECSCENTR,
+    TLE_PERICENTR,TLE_MEAN_ANOMALY,TLE_MEAN_MOTION,TLE_LINE2,TLE_CONTROL_SUM_LINE2
   ){
       this.ID=ID;
-      this.Naim=Naim;
-      this.Naim_Rus=Naim_Rus;
-      this.Kod_NORAD=Kod_NORAD;
-      this.TLE_Classification=TLE_Classification;
-      this.TLE_Name=TLE_Name;
-      this.TLE_International_class=TLE_International_class;
-      this.TLE_Epoch_year=TLE_Epoch_year;
-      this.TLE_Epoch_Time=TLE_Epoch_Time;
-      this.TLE_Element_Version=TLE_Element_Version;
-      this.TLE_Nomer_vitka=TLE_Nomer_vitka;
-      this.TLE_line1=TLE_line1;
-      this.TLE_Control_sum_line1=TLE_Control_sum_line1;
-      this.Data_beg=Data_beg;
-      this.Data_end=Data_end;
-      this.TLE_Perv_Proizv=TLE_Perv_Proizv;
-      this.TLE_Vtor_Proizv=TLE_Vtor_Proizv;
-      this.TLE_Koef_torm=TLE_Koef_torm;
-      this.TLE_Naklon=TLE_Naklon;
-      this.TLE_Dolgota_uzla=TLE_Dolgota_uzla;
-      this.TLE_Ecscentr=TLE_Ecscentr;
-      this.TLE_Pericentr=TLE_Pericentr;
-      this.TLE_Mean_Anomaly=TLE_Mean_Anomaly;
-      this.TLE_Mean_Motion=TLE_Mean_Motion;
-      this.TLE_line2=TLE_line2;
-      this.TLE_Control_sum_line2=TLE_Control_sum_line2;
-      this.Data=Data;
+      this.NAIM=NAIM;
+      this.NAIM_RUS=NAIM_RUS;
+      this.KOD_NORAD=KOD_NORAD;
+      this.TLE_CLASSIFICATION=TLE_CLASSIFICATION;
+      this.TLE_NAME=TLE_NAME;
+      this.TLE_INTERNATIONAL_CLASS=TLE_INTERNATIONAL_CLASS;
+      this.TLE_EPOCH_YEAR=TLE_EPOCH_YEAR;
+      this.TLE_EPOCH_TIME=TLE_EPOCH_TIME;
+      this.TLE_ELEMENT_VERSION=TLE_ELEMENT_VERSION;
+      this.TLE_NOMER_VITKA=TLE_NOMER_VITKA;
+      this.TLE_LINE1=TLE_LINE1;
+      this.TLE_CONTROL_SUM_LINE1=TLE_CONTROL_SUM_LINE1;
+      this.DATA_BEG=DATA_BEG;
+      this.TLE_PERV_PROIZV=TLE_PERV_PROIZV;
+      this.TLE_VTOR_PROIZV=TLE_VTOR_PROIZV;
+      this.TLE_KOEF_TORM=TLE_KOEF_TORM;
+      this.TLE_NAKLON=TLE_NAKLON;
+      this.TLE_DOLGOTA_UZLA=TLE_DOLGOTA_UZLA;
+      this.TLE_ECSCENTR=TLE_ECSCENTR;
+      this.TLE_PERICENTR=TLE_PERICENTR;
+      this.TLE_MEAN_ANOMALY=TLE_MEAN_ANOMALY;
+      this.TLE_MEAN_MOTION=TLE_MEAN_MOTION;
+      this.TLE_LINE2=TLE_LINE2;
+      this.TLE_CONTROL_SUM_LINE2=TLE_CONTROL_SUM_LINE2;
   }
 }
 function getRandomNumber(min, max) {
@@ -123,6 +121,32 @@ function getDateTime() {
    
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
+}
+function showBegLogRequest(arrClassTlEs,selector){
+document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
+  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Файл: ${document.getElementById('get_TLE').files[0].name} 
+  <br>${new Date().toLocaleString()}</span>`;
+  for (let datasTle of arrClassTlEs) {
+    const logIn=document.createElement('div');
+    logIn.innerHTML+=`<br>`;
+      for(let fieldTLE in datasTle)
+      {
+        logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
+        document.querySelector(`${selector}`).append(logIn);
+      }
+     
+  }
+  document.querySelector(`${selector}`).innerHTML+=`<br><div>Время отправки запроса: ${new Date().toLocaleString()}</div>`;
+}
+function showEndLogRequest(selector){
+  const logIn=document.createElement('div');
+  logIn.innerHTML+=`<br>`;
+  logIn.innerHTML+=`<span style="font-size: calc(1.2rem);">Завершение сеанса:</span>`
+  document.querySelector(`${selector}`).append(logIn);
+  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Время ответа: 
+  <br>${new Date().toLocaleString()}</span>`;
+  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Данные успешно добавленны</span>`
+
 }
 function readLines(fileReader) {
   document.querySelector('.column2_TLE-view').innerHTML=``;
@@ -185,39 +209,33 @@ function readLinesValue(fileReader) {
   document.querySelector('.name-document').append(nameFile);
   
   for(let i=0;i<arrClassTlEs.length;i++){
-    arrClassTlEs[i].Data_beg=String(new Date().toISOString());
-    arrClassTlEs[i].Data_end='';
-    arrClassTlEs[i].Data='';
+    arrClassTlEs[i].DATA_BEG=String(new Date().toISOString());
     arrClassTlEs[i].ID=i+1;
     
   }
   // document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
   //            font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
-  for (let datasTle of arrClassTlEs) {
-    const logIn=document.createElement('div');
-    logIn.innerHTML+=`<br>`;
-    for(let fieldTLE in datasTle)
-    {
-      logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-     
-    }
-    document.querySelector('.column2_TLE').append(logIn);
-  }
-  
-
-  // document.querySelector('.information_request').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
-  // document.querySelector('.information_request').innerHTML+=`<span class='header-log'>Данные получены из документа ${document.getElementById('get_TLE').files[0].name} 
-  // <br>${new Date().toLocaleString()}</span>`;
   // for (let datasTle of arrClassTlEs) {
   //   const logIn=document.createElement('div');
   //   logIn.innerHTML+=`<br>`;
-  //   logIn.innerHTML+=`<span style="font-size: calc(1.2rem);">Полученные данные:</span>`
-  //     for(let fieldTLE in datasTle)
-  //     {
-  //       logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-  //       document.querySelector('.information_request').append(logIn);
-  //     }
+  //   for(let fieldTLE in datasTle)
+  //   {
+  //     logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
+     
+  //   }
+  //   document.querySelector('.column2_TLE').append(logIn);
   // }
+  const dataDocument=document.createElement('div');
+  dataDocument.classList.add('data-doc');
+  arrClassTlEs.forEach(tle=>{
+    dataDocument.innerHTML+=`<div>${tle.NAIM}</div>`;
+    dataDocument.innerHTML+=`<div>${tle.TLE_LINE1}</div>`;
+    dataDocument.innerHTML+=`<div>${tle.TLE_LINE2}</div>`;
+    dataDocument.innerHTML+=`<br>`;
+  })
+  
+  document.querySelector('.name-document').append(dataDocument);
+  
   return arrClassTlEs
   // document.querySelector('.information_request').innerHTML+=`<div>Полученные данные:${JSON.stringify(arrClassTlEs)}</div>`;
 }
@@ -229,38 +247,38 @@ setInterval(function(){
 function processLine(line,count_line,jsonTLE,tle) {
   let dataTLE;
   
-  const arrTLENames=['Номер строки_1','Kod_NORAD',
-    'TLE_Classification','TLE_International_class1',
-    'TLE_International_class2',
-    'TLE_Epoch_year','TLE_Epoch_Time',
-    'TLE_Perv_Proizv','TLE_Vtor_Proizv'
-  ,'TLE_Koef_torm',
+  const arrTLENames=['Номер строки_1','KOD_NORAD',
+    'TLE_CLASSIFICATION','TLE_INTERNATIONAL_CLASS1',
+    'TLE_INTERNATIONAL_CLASS2',
+    'TLE_EPOCH_YEAR','TLE_EPOCH_TIME',
+    'TLE_PERV_PROIZV','TLE_VTOR_PROIZV'
+  ,'TLE_KOEF_TORM',
   'ephemeris_type',
-  'TLE_Element_Version',
-  'TLE_Control_sum_line1'];
+  'TLE_ELEMENT_VERSION',
+  'TLE_CONTROL_SUM_LINE1'];
   const arrTLENames_two=['Номер строки_2','Номер спутника в базе данных NORAD_2',
-    'TLE_Naklon','TLE_Dolgota_uzla'
-    ,'TLE_Ecscentr',
-    'TLE_Pericentr',
-    'TLE_Mean_Anomaly',
-    'TLE_Mean_Motion'
-  ,'TLE_Nomer_vitka',
-  'TLE_Control_sum_line2'];
+    'TLE_NAKLON','TLE_DOLGOTA_UZLA'
+    ,'TLE_ECSCENTR',
+    'TLE_PERICENTR',
+    'TLE_MEAN_ANOMALY',
+    'TLE_MEAN_MOTION'
+  ,'TLE_NOMER_VITKA',
+  'TLE_CONTROL_SUM_LINE2'];
   
   dataTLE=line;
   let element='';
   let counter=0;
   
   if (count_line==0) {
-    jsonTLE['TLE_Name']=dataTLE;
-    tle.TLE_Name=dataTLE;
-    tle.Naim=dataTLE;
+    jsonTLE['TLE_NAME']=dataTLE;
+    tle.TLE_NAME=dataTLE;
+    tle.NAIM=dataTLE;
    
-    tle.Naim_Rus= dataTLE.replace('GONETS','Гонец')
+    tle.NAIM_RUS= dataTLE.replace('GONETS','Гонец')
   }
   else if (count_line==1) {
-    jsonTLE['TLE_line1']=dataTLE;
-    tle.TLE_line1=dataTLE;
+    jsonTLE['TLE_LINE1']=dataTLE;
+    tle.TLE_LINE1=dataTLE;
     for (let i = 0; i < dataTLE.length; i++) {
       if (i==0) {
         element+=dataTLE[i];
@@ -274,7 +292,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
-          tle.Kod_NORAD=+element;
+          tle.KOD_NORAD=element;
           jsonTLE[nameField]=+element;
           element='';
           counter+=1;
@@ -287,7 +305,7 @@ function processLine(line,count_line,jsonTLE,tle) {
         element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=element;
-        tle.TLE_Classification=element;
+        tle.TLE_CLASSIFICATION=element;
         element='';
         counter+=1;
       } 
@@ -296,7 +314,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=Number(element);
-        tle.TLE_International_class=(element);
+        tle.TLE_INTERNATIONAL_CLASS=(element);
         element='';
         counter+=1;
         }
@@ -321,7 +339,7 @@ function processLine(line,count_line,jsonTLE,tle) {
       //     element+=dataTLE[i];
       //   const nameField=arrTLENames[counter];
       //   jsonTLE[nameField]=element;
-      //   tle.TLE_International_class2=element;
+      //   tle.TLE_INTERNATIONAL_CLASS2=element;
       //   element='';
       //   counter+=1;
       //   }
@@ -334,7 +352,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=Number(element);
-        tle.TLE_Epoch_year=Number(element);
+        tle.TLE_EPOCH_YEAR=Number(element);
         // console.log(element)  
         element='';
         counter+=1;
@@ -351,7 +369,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
           jsonTLE[nameField]=+(element);
-          tle.TLE_Epoch_Time=+(element);
+          tle.TLE_EPOCH_TIME=+(element);
           element='';
          
           counter+=1;
@@ -371,7 +389,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           correctElem=element.replace(/\s/,'0');
         }
         jsonTLE[nameField]=+correctElem;
-        tle.TLE_Perv_Proizv=+correctElem;
+        tle.TLE_PERV_PROIZV=+correctElem;
         element='';
         counter+=1;
         }
@@ -400,7 +418,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
           jsonTLE[nameField]=Math.pow(+num,+degree);
-          tle.TLE_Vtor_Proizv=Math.pow(+num,+degree);
+          tle.TLE_VTOR_PROIZV=Math.pow(+num,+degree);
           element='';
           counter+=1;
         }
@@ -430,7 +448,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
           jsonTLE[nameField]=Math.pow(+num,+degree);
-          tle.TLE_Koef_torm=Math.pow(+num,+degree);
+          tle.TLE_KOEF_TORM=Math.pow(+num,+degree);
           element='';
           counter+=1;
         }
@@ -453,7 +471,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Element_Version=+element;
+        tle.TLE_ELEMENT_VERSION=+element;
         element='';
         counter+=1;
         }
@@ -466,7 +484,7 @@ function processLine(line,count_line,jsonTLE,tle) {
         element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Control_sum_line1=+element;
+        tle.TLE_CONTROL_SUM_LINE1=+element;
         element='';
         counter+=1;
         
@@ -475,8 +493,8 @@ function processLine(line,count_line,jsonTLE,tle) {
     }
   }
   else if (count_line==2) {
-    jsonTLE['TLE_line2']=dataTLE;
-    tle.TLE_line2=dataTLE;
+    jsonTLE['TLE_LINE2']=dataTLE;
+    tle.TLE_LINE2=dataTLE;
     for (let i = 0; i < dataTLE.length; i++) {
       if (i==0) {
         element+=dataTLE[i];
@@ -503,7 +521,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Naklon=+element;
+        tle.TLE_NAKLON=+element;
         element='';
         counter+=1;
         }
@@ -516,7 +534,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=parseFloat(element);
-        tle.TLE_Dolgota_uzla=+element;
+        tle.TLE_DOLGOTA_UZLA=+element;
         // console.log(element)  
         element='';
         counter+=1;
@@ -533,7 +551,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
           const nameField=arrTLENames_two[counter];
           jsonTLE[nameField]=Number('0.'+element);
-          tle.TLE_Ecscentr=Number('0.'+element);
+          tle.TLE_ECSCENTR=Number('0.'+element);
           element='';
          
           counter+=1;
@@ -549,7 +567,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Pericentr=+element;
+        tle.TLE_PERICENTR=+element;
         element='';
         counter+=1;
         }
@@ -562,7 +580,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Mean_Anomaly=+element;
+        tle.TLE_MEAN_ANOMALY=+element;
         element='';
         counter+=1;
         }
@@ -575,7 +593,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Mean_Motion=+element;
+        tle.TLE_MEAN_MOTION=+element;
         element='';
         counter+=1;
         }
@@ -588,7 +606,7 @@ function processLine(line,count_line,jsonTLE,tle) {
           element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Nomer_vitka=+element;
+        tle.TLE_NOMER_VITKA=+element;
         element='';
         counter+=1;
         }
@@ -601,7 +619,7 @@ function processLine(line,count_line,jsonTLE,tle) {
         element+=dataTLE[i];
         const nameField=arrTLENames_two[counter];
         jsonTLE[nameField]=+element;
-        tle.TLE_Control_sum_line2=+element;
+        tle.TLE_CONTROL_SUM_LINE2=+element;
         element='';
         counter+=1;
         
@@ -613,10 +631,34 @@ function processLine(line,count_line,jsonTLE,tle) {
   
  
 }
-function eventSend(){
-  console.log(arr);
+async function postKA(data){
+  try {
+    const response = await fetch('http://185.192.247.60:7130/ka', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+   
+    return result;
+  }
+  catch (error) {
+    console.error("Error add row:", error);
+  }
 }
-let arr='1';
+function eventSend(){
+postKA(arr)
+.then(()=>{
+  showBegLogRequest(arr,'.information_request');
+  showBegLogRequest(arr,'.column2_TLE');
+  showEndLogRequest('.information_request');
+  showEndLogRequest('.column2_TLE');
+  document.getElementById('task-btn-TLE').disabled=true;
+})
+}
+let arr=[];
 document.addEventListener('DOMContentLoaded',function(){
   
   if (!document.querySelector('.task-btn-TLE')) {
@@ -803,7 +845,7 @@ document.addEventListener('DOMContentLoaded',function(){
               arr= readLinesValue(reader.result);
               console.log(document.getElementById('get_TLE').files[0].name);
               document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLE').files[0].name}`;
-              
+              document.getElementById('task-btn-TLE').disabled=false;
               // для разделения, если выбрано несколько файлов
               console.log("==============================");
               // console.log(jsonTLE);
@@ -864,9 +906,12 @@ if (document.getElementById("view_TLE")) {
            console.log(blob)
   })
 }
+  if ( document.getElementById("get_TLE")) {
+    document.getElementById('task-btn-TLE').disabled=true;
+    document.getElementById("get_TLE").addEventListener("change", printFiles);
+    document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
+  }
   
-  document.getElementById("get_TLE").addEventListener("change", printFiles);
-  document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
   }
 })
 
