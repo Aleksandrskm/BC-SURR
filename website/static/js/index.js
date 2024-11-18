@@ -209,7 +209,7 @@ function readLinesValue(fileReader) {
   document.querySelector('.name-document').append(nameFile);
   
   for(let i=0;i<arrClassTlEs.length;i++){
-    arrClassTlEs[i].DATA_BEG=String(new Date().toISOString());
+    arrClassTlEs[i].DATA_BEG=String(new Date().toISOString()).replace('Z','+00:00');
     arrClassTlEs[i].ID=i+1;
     
   }
