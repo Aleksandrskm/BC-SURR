@@ -59,11 +59,11 @@ class Loader {
 }
 class dataTle
 {
-  constructor(ID,NAIM,NAIM_RUS,KOD_NORAD,TLE_CLASSIFICATION,TLE_NAME,TLE_INTERNATIONAL_CLASS,TLE_EPOCH_YEAR,TLE_EPOCH_TIME,TLE_ELEMENT_VERSION
+  constructor(NAIM,NAIM_RUS,KOD_NORAD,TLE_CLASSIFICATION,TLE_NAME,TLE_INTERNATIONAL_CLASS,TLE_EPOCH_YEAR,TLE_EPOCH_TIME,TLE_ELEMENT_VERSION
     ,TLE_NOMER_VITKA,TLE_LINE1,TLE_CONTROL_SUM_LINE1,DATA_BEG,TLE_PERV_PROIZV,TLE_VTOR_PROIZV,TLE_KOEF_TORM,TLE_NAKLON,TLE_DOLGOTA_UZLA,TLE_ECSCENTR,
     TLE_PERICENTR,TLE_MEAN_ANOMALY,TLE_MEAN_MOTION,TLE_LINE2,TLE_CONTROL_SUM_LINE2
   ){
-      this.ID=ID;
+      // this.ID=ID;
       this.NAIM=NAIM;
       this.NAIM_RUS=NAIM_RUS;
       this.KOD_NORAD=KOD_NORAD;
@@ -126,9 +126,12 @@ function showBegLogRequest(arrClassTlEs,selector){
 document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
   document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Файл: ${document.getElementById('get_TLE').files[0].name} 
   <br>${new Date().toLocaleString()}</span>`;
+  let countIdTle=1;
   for (let datasTle of arrClassTlEs) {
     const logIn=document.createElement('div');
     logIn.innerHTML+=`<br>`;
+    logIn.innerHTML+=`<div>ID:${countIdTle}</div>`;
+    countIdTle+=1;
       for(let fieldTLE in datasTle)
       {
         logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
@@ -210,7 +213,7 @@ function readLinesValue(fileReader) {
   
   for(let i=0;i<arrClassTlEs.length;i++){
     arrClassTlEs[i].DATA_BEG=String(new Date().toISOString()).replace('Z','+00:00');
-    arrClassTlEs[i].ID=i+1;
+    // arrClassTlEs[i].ID=i+1;
     
   }
   // document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
