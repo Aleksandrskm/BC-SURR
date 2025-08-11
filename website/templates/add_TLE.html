@@ -5,9 +5,17 @@
     <h2>Сформировать данные БЦ для СУРР</h2>
 
     <div class="content">
+
         <div class="input_parameters_TLE">
             <div class="row_TLE">
-    
+                <div class="types_bd">
+                    <span class="types_title">Выберите тип базы данных:</span>
+                    <label for="bd-real">Основная</label>
+                    <input type="radio" name="type_bd" value="185.192.247.60:7128" id="bd-real">
+                    <label for="bd-test">Тестовая</label>
+                    <input type="radio" name="type_bd" value="185.192.247.60:7130" id="bd-test" checked>
+                </div>
+
                 <div class="column1_TLE">
                     <label class="input-file_TLE">
                         <div class="bc">Эмулятор БЦ</div>
@@ -15,21 +23,27 @@
                         <div class="div-abonent">Формирование данных орбит КА</div>
                         <br>    
                     
-                    <input id="get_TLE" accept=".txt" type="file">
+                    <input id="get_TLE" accept=".txt,.tmp" type="file">
                     <div class="input-file-text">Выберите файл содержащий данные орбит КА</div>
-                    <span class="btn-load input-file-btn">Выберите файл</span>           
+                    <span class="btn-load input-file-btn">Выберите файл БЦ</span>
                     
                     </label>
-                    
+
+                    <label class="input-file_TLEs">
+
+                        <input id="get_TLEs" accept=".txt,.tmp" type="file">
+                        <span class="btn-load input-file-btn">Выберите файл TLE</span>
+
+                    </label>
                       <div class="btn2">
                         <input type="checkbox"  id="clear" checked>
-                        <label for="clear">Предварительно очищать данные орбит КА</label> 
-                      </div> 
+                        <label for="clear">Предварительно очищать данные орбит КА</label>
+                      </div>
                     <div class="btn2">
                        
                     
                         <button id="task-btn-TLE" >Отправить данные на СУРР</button>
-                    </div> 
+                    </div>
                     
                 </div>
               
@@ -38,6 +52,14 @@
             </div>
            
             <div class="name-document"></div>
+            <span id="bc-file">Файл БЦ:</span>
+            <div id="BC-document"></div>
+            <div class="btn2">
+
+
+                <button id="view-btn-kepler">Пересчет в TLE</button>
+            </div>
+            <div id="data-document"></div>
             <div class="column2_TLE">
                     
             </div>
