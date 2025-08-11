@@ -43,6 +43,25 @@
     font-weight: bold;
     font-family: Arial, sans-serif;  
 }
+.types_title{
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+.types_bd{
+    margin-bottom: 10px;
+}
+#view-btn-kepler{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 6px;
+    text-align: center;
+    width: 250px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
 .input_parameters_TLE{
     
     overflow-y: auto;
@@ -81,7 +100,10 @@
     margin-bottom: 20px;
     /* max-width: 600px; */
     max-height: 500px;
-    overflow: auto;
+    /*overflow: auto;*/
+}
+#bc-file{
+    font-size: calc(1.2rem);
 }
 .column2_TLE-view{
     display: flex;
@@ -90,7 +112,7 @@
     margin-bottom: 20px;
     /* max-width: 600px; */
     max-height: 500px;
-    overflow: auto;  
+    overflow: auto;
 }
 .column2_TLE-view textarea{
     min-height: 20px;
