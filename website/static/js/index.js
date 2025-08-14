@@ -90,6 +90,7 @@ class dataTle
       this.TLE_CONTROL_SUM_LINE2=TLE_CONTROL_SUM_LINE2;
   }
 }
+
 function formatDateToCustomString(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -235,7 +236,184 @@ function radToDeg(radians) {
   return ((degrees % 360) + 360) % 360;  // Нормализует даже отрицательные углы
 }
 
+function  parseKepToObject(keplerStr){
+  const parts = keplerStr
+      .split(';')
+      .map(p => p.trim())
+      .filter(p => p);
 
+  // Удаляем нумерацию параметров (префиксы "1.", "2." и т.д.)
+  const cleanParts = parts.map(part => {
+    const dotIndex = part.indexOf('.');
+    return dotIndex > -1 ? part.substring(dotIndex + 1) : part;
+  });
+
+  // 1. Адресная фраза (НУ01:134,2,0,10,1)
+  const addressParts = cleanParts[0].includes(':')
+      ? cleanParts[0].split(':')[1].split(',')
+      : cleanParts[0].split(',');
+
+  const addressPhrase = {
+    nameForm: cleanParts[0].split(':')[0], // "НУ01"
+    numKA: addressParts[0] || null,
+    numCalcNu: addressParts[1] || null,
+    numModNu: addressParts[2] || null,
+    numTypeNu: addressParts[3] || null,
+    numBc: addressParts[4] || null
+  };
+
+  // 2. Первая фраза (124,1,8633)
+  const firstPhraseParts = cleanParts[1].split(',');
+  const firstPhrase = {
+    numKA: firstPhraseParts[0] || null,
+    numSysCoord: firstPhraseParts[1] || null,
+    numVitok: firstPhraseParts[2] || null
+  };
+
+  // 3. Вторая фраза - дата (08.09.2024)
+  const dateParts = cleanParts[2].split('.');
+  const secondPhrase = {
+    day: dateParts[0] || null,
+    month: dateParts[1] || null, // Обратите внимание: в исходных данных месяц и день могут быть перепутаны
+    yearShort: dateParts[2] || null,
+    yearAall: dateParts[3] || null,
+    yearEpoch: dateParts[4] || null // необязательное поле
+  };
+
+  // 4. Третья фраза - время (17.00.05.982)
+  const timeParts = cleanParts[3].split('.');
+  const thirdPhrase = {
+    hours: timeParts[0] || null,
+    minutes: timeParts[1] || null,
+    seconds: timeParts[2] || null,
+    upSeconds: timeParts[3] || null
+  };
+
+  // 5-10. ВКП параметры (-7124.598152+00 ... 7.041458+00)
+  const vkp = cleanParts.slice(4, 10).map(item => {
+    const parts = item.split('.');
+    return {
+      meaning: parts[0] || null,
+      additionally: parts[1] || null,
+      sign: item.startsWith('-') ? '-' : '+'
+    };
+  });
+
+  // 11-12. Коэффициенты (0.050000+00, 0.0000000+00)
+  const coefficients = {
+    ballisticEffect: cleanParts[10] || null,
+    coefficientLight: cleanParts[11] || null
+  };
+
+  // 13. Логическая шкала (020000000,0)
+  const logicScaleParts = cleanParts[12] ? cleanParts[12].split(',') : [];
+  const logicScale = {
+    simpleScale: logicScaleParts[0] || null,
+    fullScale: logicScaleParts[1] || null
+  };
+
+  return {
+    addressPhrase,
+    firstPhrase,
+     secondPhrase,
+     thirdPhrase,
+     vkp,
+     coefficients,
+     logicScale
+  };
+}
+function renderToRussianHTML(data, container) {
+  const rusLabels = {
+    "addressPhrase":"Адресная фраза:",
+    "firstPhrase":"Первая фраза:",
+    "secondPhrase":"Вторая фраза:",
+    "thirdPhrase":"Третья фраза:",
+    "vkp":"ВКП:",
+    "coefficients":"Коэффициенты:",
+    "logicScale":"Логическая шкала:",
+    // Адресная фраза
+    'nameForm': 'Имя формы',
+    'numKA': 'Номер КА',
+    'numCalcNu': 'Номер решения НУ',
+    'numModNu': 'Номер модификатора НУ',
+    'numTypeNu': 'Номер типа НУ',
+    'numBc': 'Номер БЦ',
+
+    // Первая фраза
+    'numSysCoord': 'Номер системы координат',
+    'numVitok': 'Номер витка',
+
+    // Дата
+    'day': 'День',
+    'month': 'Месяц',
+    'yearShort': 'Год',
+    'yearAall': 'Год ',
+    'yearEpoch': 'Год эпохи',
+
+    // Время
+    'hours': 'Часы',
+    'minutes': 'Минуты',
+    'seconds': 'Секунды',
+    'upSeconds': 'Доли секунд',
+
+    // ВКП
+    'additionally': 'Дополнительно',
+    'meaning': 'Значение',
+    'sign': 'Знак',
+
+    // Коэффициенты
+    'ballisticEffect': 'Баллистический коэффициент',
+    'coefficientLight': 'Коэффициент светового давления',
+
+    // Шкала
+    'simpleScale': 'Упрощенная шкала',
+    'fullScale': 'Полная шкала'
+  };
+
+  function createElement(key, value, level = 0) {
+    if (value === null || value === undefined) return null;
+
+    const element = document.createElement('div');
+    element.className = `data-level-${level}`;
+
+    if (typeof value === 'object') {
+      const label = document.createElement('div');
+      label.className = 'group-label';
+      label.textContent = rusLabels[key] || key+`:`;
+      element.appendChild(label);
+
+      const content = document.createElement('div');
+      content.className = 'group-content';
+
+      Object.entries(value).forEach(([subKey, subValue]) => {
+        const subElement = createElement(subKey, subValue, level + 1);
+        if (subElement) content.appendChild(subElement);
+      });
+
+      element.appendChild(content);
+    } else {
+      const label = document.createElement('span');
+      label.className = 'data-label';
+      label.textContent = `${rusLabels[key] || key}: `;
+
+      const val = document.createElement('span');
+      val.className = 'data-value';
+      val.textContent = value;
+
+      element.appendChild(label);
+      element.appendChild(val);
+    }
+
+    return element;
+  }
+
+  // Очищаем контейнер и добавляем данные
+  container.innerHTML = '';
+  Object.entries(data).forEach(([key, value]) => {
+    const element = createElement(key, value);
+    if (element) container.appendChild(element);
+  });
+}
 function parseKeplerianString(keplerStr) {
   /** Парсит строку с кеплеровскими параметрами в указанном формате */
   const parts = keplerStr
@@ -260,7 +438,8 @@ function parseKeplerianString(keplerStr) {
     // Парсим как число с плавающей точкой
     return parseFloat(s);
   }
-
+  console.log(`parts0: ${parts[0]}`)
+  console.log(`parts1: ${parts[1]}`)
   // Парсинг даты и времени
   const datePart = parts[2].replace(/^2\./, '').trim();
   const timePart = parts[3].replace(/^3\./, '').trim();
@@ -426,11 +605,11 @@ function getDateTime() {
    return dateTime;
 }
 function showBegLogRequest(arrClassTlEs,selector,idElement){
-  document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса:</span>`;
+  document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса: ${new Date().toLocaleString()}</span>`;
   const c=document.querySelector('.input-file-text');
 
 
-    document.querySelector(selector).innerHTML+= `<br><span>${new Date().toLocaleString()}</span>`;
+    // document.querySelector(selector).innerHTML+= `<span>${new Date().toLocaleString()}</span>`;
     // let countIdTle=1;
     for (let datasTle of arrClassTlEs) {
       const logIn=document.createElement('div');
@@ -453,7 +632,7 @@ function showEndLogRequest(selector){
   document.querySelector(`${selector}`).append(logIn);
   document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Время ответа: 
   <br>${new Date().toLocaleString()}</span>`;
-  document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Данные успешно добавленны</span>`
+  document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Данные успешно добавлены</span>`
 
 }
 function readLines(fileReader) {
@@ -509,12 +688,12 @@ function readLinesValue(fileReader,keplerData,idElement) {
   // document.querySelector('.column2_TLE').innerHTML=JSON.stringify(arrClassTlEs);
  
   // document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
-  let nameFile=document.createElement('span');
-  document.querySelector('.name-document').innerHTML='';
-  nameFile.classList.add('header-log');
-  nameFile.innerHTML=`Файл: ${document.getElementById(`${idElement}`).files[0].name} 
-  ${new Date().toLocaleString()}`;
-  document.querySelector('.name-document').append(nameFile);
+  // let nameFile=document.createElement('span');
+  // document.querySelector('.name-document').innerHTML='';
+  // nameFile.classList.add('header-log');
+  // nameFile.innerHTML=`Файл: ${document.getElementById(`${idElement}`).files[0].name}
+  // ${new Date().toLocaleString()}`;
+  // document.querySelector('.name-document').append(nameFile);
   
   for(let i=0;i<arrClassTlEs.length;i++){
     arrClassTlEs[i].DATA_BEG=String(new Date().toISOString()).replace('Z','+00:00');
@@ -533,20 +712,22 @@ function readLinesValue(fileReader,keplerData,idElement) {
   //   }
   //   document.querySelector('.column2_TLE').append(logIn);
   // }
+  // document.getElementById('data-kepler').innerHTML=``;
+  // document.getElementById('data-document').innerHTML+=``
   const dataDocument=document.createElement('div');
   dataDocument.classList.add('data-doc');
   arrClassTlEs.forEach(tle=>{
-    dataDocument.innerHTML+=`<div>Результат в виде TLE строки:</div>`;
+    // dataDocument.innerHTML+=`<div>Результат в виде TLE строки:</div>`;
     dataDocument.innerHTML+=`<div>${tle.NAIM}</div>`;
     dataDocument.innerHTML+=`<div>${tle.TLE_LINE1}</div>`;
     dataDocument.innerHTML+=`<div>${tle.TLE_LINE2}</div>`;
     dataDocument.innerHTML+=`<br>`;
-    if (Object.keys(keplerData).length){
-      dataDocument.innerHTML+=`<div>Данные полученные из Кеплеровского формата:</div>`;
-      for (const key in keplerData) {
-        dataDocument.innerHTML+=`<div>${key}: ${keplerData[key]}</div>`;
-      }
-    }
+    // if (Object.keys(keplerData).length){
+    //   dataDocument.innerHTML+=`<div>Данные полученные из Кеплеровского формата:</div>`;
+    //   for (const key in keplerData) {
+    //     dataDocument.innerHTML+=`<div>${key}: ${keplerData[key]}</div>`;
+    //   }
+    // }
 
   })
   
@@ -980,15 +1161,15 @@ function eventSend(){
   }else {
     idElem='get_TLEs'
   }
-  showBegLogRequest(arr,'.information_request',idElem);
-  showBegLogRequest(arr,'.column2_TLE',idElem);
-  postKA(arr,idElem)
+  showBegLogRequest(arr,'#comtainer-logs',idElem);
+  // showBegLogRequest(arr,'.column2_TLE',idElem);
+  postKA(arr,selectedValue)
   .then(()=>{
 
     console.log(idElem)
 
-    showEndLogRequest('.information_request');
-    showEndLogRequest('.column2_TLE');
+    showEndLogRequest('#comtainer-logs');
+    // showEndLogRequest('.column2_TLE');
     document.getElementById('task-btn-TLE').disabled=true;
   })
 }
@@ -996,6 +1177,7 @@ let arr=[];
 function logKepler(keplerData){
 
 }
+
 document.addEventListener('DOMContentLoaded',function(){
   // const kepler_str ='НУ01:134,2,0,10,1;1.134,1,8533;2.08.09.2024;3.17.00.05.982;4.-7724.598152+00;5.-1609.364940+00;6.0.000000+00;7.0.073185+00;8.-0.342691+00;9.7.041358+00;10.0.050000+00;11.0.0000000+00;12.020000000,0;'
   //
@@ -1016,6 +1198,8 @@ document.addEventListener('DOMContentLoaded',function(){
   //
   //
 function keplerToTLE(){
+  document.getElementById('data-document').innerHTML=``;
+  // document.getElementById('data-kepler').innerHTML=``;
   const kepler_str = document.querySelector('textarea').value;
   console.log(kepler_str)
 
@@ -1034,7 +1218,7 @@ function keplerToTLE(){
   };
   console.log(updatedKeplerElements)
   const [tle1,tle2] = generateTLEFromKeplerian(updatedKeplerElements);
-  const nameTLE='Sat';
+  const nameTLE=updatedKeplerElements.sat_num;
   const tle=`${nameTLE}\r\n${tle1}\r\n${tle2}`;
 
 
@@ -1056,11 +1240,56 @@ function keplerToTLE(){
         reader.onload = () => {
           document.getElementById('data-document').innerHTML=``;
           document.getElementById('BC-document').innerHTML=``;
+          document.getElementById('data-kepler').innerHTML=``;
+          document.getElementById('convert-kepler').innerHTML=``;
+          console.log(document.getElementById('data-kepler'))
               console.log(reader.result);
-             const bcData=document.createElement("textarea");
-             bcData.innerText=reader.result;
+              const bcData=document.createElement("textarea");
+              bcData.innerText=reader.result;
+
+
 
               document.getElementById('BC-document').append(bcData);
+              const kepler_str = document.querySelector('textarea').value;
+              console.log(kepler_str)
+
+              const parsed_data = parseKeplerianString(kepler_str);
+              console.log(parsed_data);
+              const kepler_elements = stateVectorToKeplerian(
+                  parsed_data.position,
+                  parsed_data.velocity
+              );
+              const updatedKeplerElements = {
+                ...kepler_elements,
+                sat_num: parsed_data.sat_num,
+                epoch: parsed_data.epoch,
+                bstar: parsed_data.bstar,
+                mean_motion_dot: parsed_data.mean_motion_dot,
+              };
+              const rusNamesKepler={
+                e:'Эксцентриситет',
+                a:'Большая полуось',
+                i:"Наклонение",
+                raan:'Долгота восходящего узла',
+                argp:'Аргумент перицентра',
+                sat_num:'Номер КА',
+                epoch:'Эпоха',
+                nu:'Истинная аномалия',
+                bstar:'Коэффициент торможения',
+                mean_motion_dot:'Производная среднего движения',
+
+
+
+
+              }
+              if (Object.keys(updatedKeplerElements).length){
+                for (const key in updatedKeplerElements) {
+                  document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
+                }
+              }
+              const parseData=parseKepToObject(kepler_str)
+              console.log(parseData)
+              renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
               console.log(arr);
@@ -1092,7 +1321,9 @@ function keplerToTLE(){
           console.log(reader.result);
           document.getElementById('data-document').innerHTML=``;
           document.getElementById('BC-document').innerHTML=``;
-
+          document.getElementById('data-kepler').innerHTML=``;
+          document.getElementById('convert-kepler').innerHTML=``;
+          console.log(document.getElementById('data-kepler'))
           arr= readLinesValue(reader.result, {},'get_TLEs');
           console.log(arr);
           console.log(document.getElementById('get_TLEs').files[0].name);
