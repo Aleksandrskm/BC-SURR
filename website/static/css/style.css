@@ -1,5 +1,5 @@
 .content {
-    height: calc(76vh);
+    height: calc(67vh);
     /* margin: 100px auto; */
     padding: 7px;
     display: flex;
@@ -11,11 +11,22 @@
     justify-content: center;
     
 }
+.group-label{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
 #response3{
     min-height: 24vh;
     overflow-y: scroll;
     /* max-height: 300px; */
     display: none;
+}
+#comtainer-logs{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    overflow: auto;
 }
 #abonent-select{
     margin-bottom: 10px;
@@ -44,18 +55,27 @@
     font-family: Arial, sans-serif;  
 }
 .types_title{
-    margin-bottom: 10px;
     font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    font-size: 1.2rem;
+    align-self: center;
 }
 .types_bd{
+    display: flex;
+    flex-direction: column;
     margin-bottom: 10px;
+    margin-top: 20px;
+    align-self: center;
 }
 #view-btn-kepler{
+    max-width: 225px;
     margin-bottom: 10px;
     margin-top: 10px;
     padding: 6px;
     text-align: center;
-    width: 250px;
+    width: max(225px, 15vw);
     border-radius: 6px;
     border-width: 2px;
     font-size: calc(1rem);
@@ -64,7 +84,7 @@
 }
 .input_parameters_TLE{
     
-    overflow-y: auto;
+    /*overflow-y: auto;*/
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -78,10 +98,14 @@
     padding: 20px;
     box-sizing: border-box;
 }
-
+#BC-document textarea{
+    width: max(250px,30vw);
+}
 #task-btn-TLE{
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin: 20px;
+    /*margin-left: 20px;*/
+    /*margin-bottom: 10px;*/
+    /*margin-top: 10px;*/
     padding: 6px;
     text-align: center;
     width: 250px;
@@ -91,18 +115,29 @@
     font-weight: bold;
     font-family: Arial, sans-serif;
 }
+#clear-bc{margin-left: 10px}
+.wraper-top h2{
+    border-bottom: 0px solid #999999;
+    flex:4;
+}
 .input-file_TLE {
 	position: relative;
 	display: inline-block;
 }
 .column2_TLE{
+    overflow: auto;
     margin-top: 20px;
     margin-bottom: 20px;
     /* max-width: 600px; */
     max-height: 500px;
     /*overflow: auto;*/
+    display: flex;
+    flex-direction: column;
 }
 #bc-file{
+    font-size: calc(1.2rem);
+}
+.tle-file{
     font-size: calc(1.2rem);
 }
 .column2_TLE-view{
@@ -142,6 +177,9 @@
 	transition: background-color 0.2s;
 }
 .btn-load{
+    min-width: 225px;
+    width: min(225px, 25vw);
+    margin-right: 10px;
     height: 40px;
     margin-left: 15px;
     text-align: center;
@@ -173,11 +211,19 @@
     margin-top: 10px;
 }
 .data-doc{
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    max-height: 200px;
+    /*max-height: 200px;*/
     margin-top: 10px;
+}
+#data-document{
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 label{
     font-size: calc(1.2rem);
@@ -726,14 +772,33 @@ body {
         height: 80vh;
         margin: 0;
 }
-
+.bd-elem{
+    margin-right: 50px;
+}
 .btn2 {
     margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.btns-clear-bc {
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: space-between;*/
+    /*align-items: center;*/
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex
+;
+    height: 50px;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-right: min(40vw, 650px);
 }
 .div-abonent{
     font-size: calc(1.2rem);
@@ -770,6 +835,28 @@ body {
 .header-log{
     font-size: calc(1.2rem);
     
+}
+#container-content{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.log{
+    font-size: calc(1rem);
+}
+#kepler-data{
+    display: flex;
+    flex-direction: column;
+    /*overflow: auto;*/
+    /*max-height: 100px;*/
+}
+#prom-data{
+    margin-bottom: 10px;
+}
+#data-kepler{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
 }
 /* Контейнер загрузки */
 .loader-container {
