@@ -69,7 +69,26 @@
     margin-top: 20px;
     align-self: center;
 }
+.data-header{
+    font-size: calc(1.1rem);
+}
+.data-header-min{
+    font-size: calc(1rem);
+}
 #view-btn-kepler{
+    max-width: 225px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 6px;
+    text-align: center;
+    width: max(225px, 15vw);
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+#download-tle-surr{
     max-width: 225px;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -99,6 +118,7 @@
     box-sizing: border-box;
 }
 #BC-document textarea{
+    font-size: calc(1.1rem);
     width: max(250px,30vw);
 }
 #task-btn-TLE{
