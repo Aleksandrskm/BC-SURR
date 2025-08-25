@@ -564,10 +564,42 @@ function stateVectorToKeplerian(position, velocity, mu = 3.986004418e14) {
     nu: nu
   };
 }
+function viewDefaulTles(){
+  const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
+  getKaDefault(selectedValue).then(data=>{
+    console.log(data)
+    const dataEnds=convertLineEndings(data)
+    document.getElementById('data-document').innerHTML=``;
+    document.getElementById('BC-document').innerHTML=``;
+    document.getElementById('data-kepler').innerHTML=``;
+    document.getElementById('convert-kepler').innerHTML=``;
+    console.log(document.getElementById('data-kepler'))
+    arr= readLinesValue(dataEnds, {},'get_TLEs');
+    console.log(arr);
 
+    document.querySelector('.input-file-text').innerHTML=`Выбран файл: TLE по умолчанию`;
+    document.getElementById('task-btn-TLE').disabled=false;
+  });
+}
+async function getKaDefault(url){
+  try {
+    const response = await fetch(`http://${url}/service/ka_default_file?ist=73`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
+    const result = await response;
+    return result.text();
+  }
+  catch (error) {
+    console.error("Error add row:", error);
+  }
+}
 
-
-
+function convertLineEndings(text) {
+  return text.replace(/\n/g, '\r\n');
+}
 
 
 
@@ -1135,6 +1167,144 @@ function processLine(line,count_line,jsonTLE,tle) {
   
  
 }
+function parseAndDisplayKeplerData(inputString) {
+  const outputElement = document.getElementById('convert-kepler');
+
+  if (!outputElement) {
+    console.error('Элемент с id="convert-kepler" не найден');
+    return;
+  }
+
+  try {
+    const dataParts = inputString.split(';').filter(part => part.trim());
+
+    let htmlOutput = '<div class="kepler-data">';
+    // htmlOutput += '<div>Данные Кеплера:</div>';
+    htmlOutput += '<div class="data-container">';
+
+    // Адресная фраза
+    const addressPart = dataParts[0].split(':')[0].split(',');
+
+    const adresPart = dataParts[0].split(',');
+    console.log(dataParts[0],addressPart,adresPart[0])
+    htmlOutput += `
+            <div class="data-group">
+                <div class="data-header">Адресная фраза- Общие данные:</div>
+                <div class="data-value">${dataParts[0]}</div>
+                <div class="data-description">
+                <br>
+                    <div class="data-header-min">Состав адресной фразы:</div>
+                    <span>Имя формы: ${adresPart[0].substring(0, 4)}; </span>
+                    <span>Номер КА: ${adresPart[0].substring(5) || 'не указан'}; </span>
+                    <span>Номер решения НУ: ${adresPart[1] || 'не указан'}; </span>
+                    <span>Номер модификатора НУ: ${adresPart[2] || 'не указан'}; </span>
+                    <span>Номер типа НУ: ${adresPart[3] || 'не указан'}; </span>
+                    <span>Номер БЦ,производившего решение : ${adresPart[4] || 'не указан'}; </span>
+                </div>
+            </div>`;
+
+    // Первая фраза - основные параметры
+    const firstPhrase = dataParts[1].split(',');
+    htmlOutput += `
+            <div class="data-group">
+             <br>
+                <div class="data-header">Фраза 1 - Основные параметры</div>
+                <div class="data-value">${dataParts[1]}</div>
+                <div class="data-description">
+                <br>
+                    <div class="data-header-min">Состав первой фразы:</div>
+                    <span>Номер КА: ${firstPhrase[0].split('.')[1] || 'не указан'}; </span>
+                    <span>Номер системы координат: ${firstPhrase[1] || 'не указан'}; </span>
+                    <span>Номер витка: ${firstPhrase[2] || 'не указан'}; </span>
+                </div>
+            </div>`;
+
+    // Вторая фраза - дата
+    const secondPhrase = dataParts[2].split('.');
+    htmlOutput += `
+            <div class="data-group">
+             <br>
+                <div class="data-header">Фраза 2 - Дата задания параметров:</div>
+                <div class="data-value">${dataParts[2]}</div>
+            </div>`;
+
+    // Третья фраза - время
+    const timePhrase = dataParts[3].split('.');
+    htmlOutput += `
+            <div class="data-group">
+             <br>
+                <div class="data-header">Фраза 3 - Время задания параметров:</div>
+                <div class="data-value">${dataParts[3]}</div>
+                <div class="data-description">
+            </div>`;
+
+    // Фразы 4-9 - ВКП (Вектор состояния космического аппарата)
+    const vkpLabels = [
+      'X координата (км)', 'Y координата (км)', 'Z координата (км)',
+      'Vx скорость (км/с)', 'Vy скорость (км/с)', 'Vz скорость (км/с)'
+    ];
+
+    for (let i = 4; i <= 9; i++) {
+      if (dataParts[i]) {
+        const value = dataParts[i].substring(2);
+        htmlOutput += `
+                    <div class="data-group">
+                     <br>
+                        <div class="data-header">Фраза ${i} - ВКП(Вектор состояния космического аппарата)</div>
+                        <div class="data-value">${dataParts[i]}</div>
+                        <div class="data-description">
+                            <span>${vkpLabels[i-4]}:</span>
+                            <span>${value}</span>
+                        </div>
+                    </div>`;
+      }
+    }
+
+    // Десятая фраза - баллистический коэффициент
+    if (dataParts[10]) {
+      htmlOutput += `
+                <div class="data-group">
+                <br>
+                    <div class="data-header">Фраза 10 - Баллистический коэффициент</div>
+                    <div class="data-value">${dataParts[10]}</div>
+                    
+                </div>`;
+    }
+
+    // Одиннадцатая фраза - коэффициент светового давления
+    if (dataParts[11]) {
+      htmlOutput += `
+                <div class="data-group">
+                <br>
+                    <div class="data-header">Фраза 11 - Коэффициент светового давления</div>
+                    <div class="data-value">${dataParts[11]}</div>
+                    
+                </div>`;
+    }
+
+    // Двенадцатая фраза - логические шкалы сил
+    if (dataParts[12]) {
+      const logicParts = dataParts[12].split(',');
+      htmlOutput += `
+                <div class="data-group">
+                <br>
+                    <div class="data-header">Фраза 12 - Логические шкалы сил</div>
+                    <div class="data-value">${dataParts[12]}</div>
+                    <div class="data-description">
+                        <span>Упрощенная шкала: ${logicParts[0].substring(2) || 'не указана'}</span>
+                        <span>Полная шкала: ${logicParts[1] || 'не указана'}</span>
+                    </div>
+                </div>`;
+    }
+
+    htmlOutput += '</div></div>';
+    outputElement.innerHTML = htmlOutput;
+
+  } catch (error) {
+    outputElement.innerHTML = `<p style="color: red;">Ошибка при обработке данных: ${error.message}</p>`;
+    console.error('Ошибка парсинга:', error);
+  }
+}
 async function postKA(data,url){
   try {
     const response = await fetch(`http://${url}/ka?ist=73`, {
@@ -1268,13 +1438,13 @@ function keplerToTLE(){
               };
               const rusNamesKepler={
                 e:'Эксцентриситет',
-                a:'Большая полуось',
-                i:"Наклонение",
-                raan:'Долгота восходящего узла',
-                argp:'Аргумент перицентра',
+                a:'Большая полуось (км)',
+                i:"Наклонение (рад)",
+                raan:'Долгота восходящего узла (рад)',
+                argp:'Аргумент перицентра (рад)',
                 sat_num:'Номер КА',
                 epoch:'Эпоха',
-                nu:'Истинная аномалия',
+                nu:'Истинная аномалия (рад)',
                 bstar:'Коэффициент торможения',
                 mean_motion_dot:'Производная среднего движения',
 
@@ -1289,7 +1459,8 @@ function keplerToTLE(){
               }
               const parseData=parseKepToObject(kepler_str)
               console.log(parseData)
-              renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
+          parseAndDisplayKeplerData(kepler_str);
+              // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
               console.log(arr);
@@ -1392,6 +1563,7 @@ if (document.getElementById("view_TLE")) {
 }
   if ( document.getElementById("get_TLE")) {
     document.getElementById('task-btn-TLE').disabled=true;
+    document.getElementById('download-tle-surr').addEventListener('click',viewDefaulTles);
     document.getElementById("get_TLE").addEventListener("change", printFiles);
     document.getElementById('task-btn-TLE').addEventListener('click',eventSend);
     document.getElementById("get_TLEs").addEventListener("change", printFilesTLEs);
