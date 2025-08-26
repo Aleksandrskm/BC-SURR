@@ -577,7 +577,7 @@ function viewDefaulTles(){
     arr= readLinesValue(dataEnds, {},'get_TLEs');
     console.log(arr);
 
-    document.querySelector('.input-file-text').innerHTML=`Выбран файл: TLE по умолчанию`;
+    document.querySelector('.input-file-text').innerHTML=`Наименование файла: TLE по умолчанию`;
     document.getElementById('task-btn-TLE').disabled=false;
   });
 }
@@ -1438,13 +1438,13 @@ function keplerToTLE(){
               };
               const rusNamesKepler={
                 e:'Эксцентриситет',
-                a:'Большая полуось (км)',
-                i:"Наклонение (рад)",
-                raan:'Долгота восходящего узла (рад)',
-                argp:'Аргумент перицентра (рад)',
+                a:'Большая полуось',
+                i:"Наклонение",
+                raan:'Долгота восходящего узла',
+                argp:'Аргумент перицентра',
                 sat_num:'Номер КА',
                 epoch:'Эпоха',
-                nu:'Истинная аномалия (рад)',
+                nu:'Истинная аномалия',
                 bstar:'Коэффициент торможения',
                 mean_motion_dot:'Производная среднего движения',
 
@@ -1459,8 +1459,7 @@ function keplerToTLE(){
               }
               const parseData=parseKepToObject(kepler_str)
               console.log(parseData)
-          parseAndDisplayKeplerData(kepler_str);
-              // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
+              renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
               console.log(arr);

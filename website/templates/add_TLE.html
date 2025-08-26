@@ -33,14 +33,17 @@
 
                     <br>
                     <div class="div-abonent">Формирование данных орбит КА</div>
+                    <div class="input-file-text">Наименование файла:</div>
                     <br>
                     <div class="column1_TLE">
+                        <div style="width: 225px"></div>
+                        <button disabled="true" id="download-bc-surr" class="bc-btns">Выбор файла БЦ по умолчанию</button>
                         <label class="input-file_TLE">
 
 
                             <input id="get_TLE" accept=".txt,.tmp" type="file">
-                            <div class="input-file-text">Выберите файл содержащий данные орбит КА</div>
-                            <span class="btn-load input-file-btn">Выберите файл БЦ</span>
+
+                            <span class="btn-load input-file-btn" class="bc-btns">Выбор файла БЦ</span>
 
                         </label>
 
@@ -54,26 +57,26 @@
                 </div>
 
                 <div class="name-document"></div>
-                <span id="bc-file">Файл БЦ:</span>
+                <span id="bc-file">Содержание файла БЦ:</span>
                 <div id="BC-document"></div>
                 <br>
-                <div id="bc-kepler" > <div id="bc-kepler-data" class="header-log">Формат файла БЦ:</div>
+                <div id="bc-kepler" > <div id="bc-kepler-data" class="header-log">Расшифровка файла БЦ:</div>
 
                     <div id="convert-kepler"></div>
                 </div>
                 <br>
-                <div id="kepler-data" class="header-log"> <div id="prom-data">Промежуточные данные :</div>
+                <div id="kepler-data" class="header-log"> <div id="prom-data">Промежуточные баллистические данные :</div>
                     <div id="data-kepler"></div>
                 </div>
                 <div class="btn2">
 
 
-                    <button id="view-btn-kepler">Пересчет в TLE</button>
-                    <button id="download-tle-surr">Выбрать файл TLE по умолчанию</button>
+                    <button id="view-btn-kepler" class="bc-btns">Пересчет в TLE</button>
+                    <button id="download-tle-surr" class="bc-btns">Выбор файла TLE по умолчанию</button>
                     <label class="input-file_TLEs">
 
                         <input id="get_TLEs" accept=".txt,.tmp" type="file">
-                        <span class="btn-load input-file-btn">Выберите файл TLE</span>
+                        <span class="btn-load input-file-btn bc-btns">Выбор файла TLE</span>
 
                     </label>
 
