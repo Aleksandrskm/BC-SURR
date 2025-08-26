@@ -1465,7 +1465,7 @@ function keplerToTLE(){
 
               console.log(arr);
               console.log(document.getElementById('get_TLE').files[0].name);
-              document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLE').files[0].name}`;
+              document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('get_TLE').files[0].name}`;
 
               // для разделения, если выбрано несколько файлов
               console.log("==============================");
@@ -1498,7 +1498,7 @@ function keplerToTLE(){
           arr= readLinesValue(reader.result, {},'get_TLEs');
           console.log(arr);
           console.log(document.getElementById('get_TLEs').files[0].name);
-          document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLEs').files[0].name}`;
+          document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('get_TLEs').files[0].name}`;
           document.getElementById('task-btn-TLE').disabled=false;
           // для разделения, если выбрано несколько файлов
           console.log("==============================");
@@ -1523,7 +1523,7 @@ function keplerToTLE(){
       reader.onload = () => {  
             
             console.log(document.getElementById('view_TLE').files[0].name);
-            document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('view_TLE').files[0].name}`;
+            document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('view_TLE').files[0].name}`;
             readLines(reader.result);
             // для разделения, если выбрано несколько файлов
             console.log("==============================");
