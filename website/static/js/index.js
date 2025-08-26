@@ -1438,13 +1438,13 @@ function keplerToTLE(){
               };
               const rusNamesKepler={
                 e:'Эксцентриситет',
-                a:'Большая полуось (км)',
-                i:"Наклонение (рад)",
-                raan:'Долгота восходящего узла (рад)',
-                argp:'Аргумент перицентра (рад)',
+                a:'Большая полуось',
+                i:"Наклонение",
+                raan:'Долгота восходящего узла',
+                argp:'Аргумент перицентра',
                 sat_num:'Номер КА',
                 epoch:'Эпоха',
-                nu:'Истинная аномалия (рад)',
+                nu:'Истинная аномалия',
                 bstar:'Коэффициент торможения',
                 mean_motion_dot:'Производная среднего движения',
 
@@ -1459,13 +1459,12 @@ function keplerToTLE(){
               }
               const parseData=parseKepToObject(kepler_str)
               console.log(parseData)
-          parseAndDisplayKeplerData(kepler_str);
-              // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
+              renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
               console.log(arr);
               console.log(document.getElementById('get_TLE').files[0].name);
-              document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('get_TLE').files[0].name}`;
+              document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLE').files[0].name}`;
 
               // для разделения, если выбрано несколько файлов
               console.log("==============================");
@@ -1498,7 +1497,7 @@ function keplerToTLE(){
           arr= readLinesValue(reader.result, {},'get_TLEs');
           console.log(arr);
           console.log(document.getElementById('get_TLEs').files[0].name);
-          document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('get_TLEs').files[0].name}`;
+          document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('get_TLEs').files[0].name}`;
           document.getElementById('task-btn-TLE').disabled=false;
           // для разделения, если выбрано несколько файлов
           console.log("==============================");
@@ -1523,7 +1522,7 @@ function keplerToTLE(){
       reader.onload = () => {  
             
             console.log(document.getElementById('view_TLE').files[0].name);
-            document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('view_TLE').files[0].name}`;
+            document.querySelector('.input-file-text').innerHTML=`Выбран файл: ${document.getElementById('view_TLE').files[0].name}`;
             readLines(reader.result);
             // для разделения, если выбрано несколько файлов
             console.log("==============================");
