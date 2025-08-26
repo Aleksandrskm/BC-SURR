@@ -101,6 +101,22 @@
     font-weight: bold;
     font-family: Arial, sans-serif;
 }
+.bc-btns{
+    height: 55px;
+}
+#download-bc-surr{
+    max-width: 225px;
+    /*margin-bottom: 10px;*/
+    /*margin-top: 10px;*/
+    padding: 6px;
+    text-align: center;
+    width: max(225px, 15vw);
+    border-radius: 6px;
+    border-width: 2px;
+    /*font-size: calc(1rem);*/
+    /*font-weight: bold;*/
+    font-family: Arial, sans-serif;
+}
 .input_parameters_TLE{
     
     /*overflow-y: auto;*/
@@ -173,6 +189,12 @@
     min-height: 20px;
     min-width: 100px;
 }
+.column1_TLE{
+    display: flex
+;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
 .input-file-btn {
     font-size: calc(1rem);
     font-weight: bold;
@@ -200,7 +222,7 @@
     min-width: 225px;
     width: min(225px, 25vw);
     margin-right: 10px;
-    height: 40px;
+    height: 55px;
     margin-left: 15px;
     text-align: center;
     border-radius: 6px;
@@ -221,8 +243,9 @@
     font-weight: bold;
     font-family: Arial, sans-serif
 }
+
 .row_TLE{
-    text-align: center;
+    /*text-align: center;*/
 }
 .name-document{
     display: flex;
@@ -252,7 +275,7 @@ label{
     font-size: calc(1.1rem);
     /* font-weight: bold; */
     font-family: Arial, sans-serif;
-	padding: 0 10px;
+	/*padding: 0 10px;*/
 	line-height: 40px;
 	display: inline-block;
 }
