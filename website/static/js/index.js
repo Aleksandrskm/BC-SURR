@@ -1437,14 +1437,14 @@ function keplerToTLE(){
                 mean_motion_dot: parsed_data.mean_motion_dot,
               };
               const rusNamesKepler={
-                e:'Эксцентриситет',
-                a:'Большая полуось',
-                i:"Наклонение",
-                raan:'Долгота восходящего узла',
-                argp:'Аргумент перицентра',
+                e:'Эксцентриситет ',
+                a:'Большая полуось (км)',
+                i:"Наклонение (рад)",
+                raan:'Долгота восходящего узла (рад)',
+                argp:'Аргумент перицентра (рад)',
                 sat_num:'Номер КА',
                 epoch:'Эпоха',
-                nu:'Истинная аномалия',
+                nu:'Истинная аномалия (рад)',
                 bstar:'Коэффициент торможения',
                 mean_motion_dot:'Производная среднего движения',
 
@@ -1459,7 +1459,8 @@ function keplerToTLE(){
               }
               const parseData=parseKepToObject(kepler_str)
               console.log(parseData)
-              renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
+              parseAndDisplayKeplerData(kepler_str);
+              // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
               console.log(arr);
