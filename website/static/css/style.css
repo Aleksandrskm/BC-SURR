@@ -113,8 +113,8 @@
     width: max(225px, 15vw);
     border-radius: 6px;
     border-width: 2px;
-    /*font-size: calc(1rem);*/
-    /*font-weight: bold;*/
+    font-size: calc(1rem);
+    font-weight: bold;
     font-family: Arial, sans-serif;
 }
 .input_parameters_TLE{
