@@ -108,7 +108,7 @@ function formatDateToCustomString(date) {
 }
 function generateTLEFromKeplerian(keplerParams) {
   /** Генерирует валидный TLE из кеплеровских параметров с проверкой границ */
-  const {
+  let {
     sat_num: satNum,
     epoch, // ожидается строка в формате "2024-09-08 17:00:05.982000"
     a,
@@ -147,7 +147,7 @@ function generateTLEFromKeplerian(keplerParams) {
   const checkedTrueAnomaly = trueAnomaly % (2 * Math.PI);
 
   // Расчет параметров
-  const mu = 3.986004418e14;
+  const mu = 398600.4418;
   const nRadPerSec = Math.sqrt(mu / Math.max(a, 1.0));
   let nRevPerDay = (nRadPerSec * 86400) / (2 * Math.PI);
   nRevPerDay = Math.max(0.99, Math.min(17.0, nRevPerDay));
@@ -225,11 +225,15 @@ function generateTLEFromKeplerian(keplerParams) {
       `.${Math.abs(Math.floor(meanMotionDot * 1e10)).toString().padStart(8, '0')} ` +
       ` 00000-0 ` +
       `${formattedBstar} 0  0000`;
+  let raans=(radToDeg(checkedRaan) % 360);
 
+  raans=(raans <100)? raans>10?`0${raans.toFixed(4)}`:`00${raans.toFixed(4)}`:raans.toFixed(4);
+  console.log(meanMotionDot);
+  meanMotionDot/=10;
   const tleLine2 =
       `2 ${checkedSatNum.toString().padStart(5, '0')} ` +
       `${(radToDeg(checkedInclination) % 360).toFixed(4).padStart(8, ' ')}` +
-      ` ${(radToDeg(checkedRaan) % 360).toFixed(4).padStart(8, ' ')} ` +
+      ` ${raans} ` +
       `${Math.min(9999999, Math.floor(checkedEccentricity * 1e7)).toString().padStart(7, '0')} ` +
       `${(radToDeg(checkedArgp) % 360).toFixed(4).padStart(8, ' ')} ` +
       `${(radToDeg(M) % 360).toFixed(4).padStart(8, ' ')}` +
@@ -510,12 +514,12 @@ function parseKeplerianString(keplerStr) {
   };
 }
 
-function stateVectorToKeplerian(position, velocity, mu = 3.986004418e14) {
+function stateVectorToKeplerian(position, velocity, mu =398600.4418) {
   /** Преобразует вектор состояния в кеплеровские элементы */
-  const r = position.map(x => Math.abs(x)); // Убираем отрицательные значения
-  const v = velocity.map(x => Math.abs(x)); // Убираем отрицательные значения
-  // const r = [...position];
-  // const v = [...velocity];
+  // const r = position.map(x => Math.abs(x)); // Убираем отрицательные значения
+  // const v = velocity.map(x => Math.abs(x)); // Убираем отрицательные значения
+  const r = [...position];
+  const v = [...velocity];
   console.log(r);
   console.log(v);
   // Вспомогательные функции
@@ -592,49 +596,18 @@ function viewDefaulTles(){
 function keplerToTLE(){
   document.getElementById('data-document').innerHTML=``;
   // document.getElementById('data-kepler').innerHTML=``;
-  const kepler_str = document.querySelector('textarea').value;
-  console.log(kepler_str)
+  const arrJoinKepler=[];
+  const keplerStrs=document.querySelectorAll('textarea');
+  keplerStrs.forEach(keplerStr=>{
+    arrJoinKepler.push(keplerStr.value);
 
-  const parsed_data = parseKeplerianString(kepler_str);
-  console.log(parsed_data);
-  const kepler_elements = stateVectorToKeplerian(
-      parsed_data.position,
-      parsed_data.velocity
-  );
-  const updatedKeplerElements = {
-    ...kepler_elements,
-    sat_num: parsed_data.sat_num,
-    epoch: parsed_data.epoch,
-    bstar: parsed_data.bstar,
-    mean_motion_dot: parsed_data.mean_motion_dot,
-  };
-  console.log(updatedKeplerElements)
-  const [tle1,tle2] = generateTLEFromKeplerian(updatedKeplerElements);
-  const nameTLE=updatedKeplerElements.sat_num;
-  const tle=`${nameTLE}\r\n${tle1}\r\n${tle2}`;
-
-
-  console.log(tle);
-
-  arr= readLinesValue(tle,updatedKeplerElements,'get_TLE');
-  document.getElementById('task-btn-TLE').disabled=false;
-}
-function viewDefaulBc(){
-  const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
-  getKaDefault(selectedValue,'BC').then(data=>{
-    console.log(data)
-    // const dataEnds=convertLineEndings(data)
-    document.getElementById('data-document').innerHTML=``;
-    document.getElementById('BC-document').innerHTML=``;
-    document.getElementById('data-kepler').innerHTML=``;
-    document.getElementById('convert-kepler').innerHTML=``;
-    console.log(document.getElementById('data-kepler'))
-    const bcData=document.createElement("textarea");
-    bcData.innerText=data;
-    document.getElementById('BC-document').append(bcData);
-    const kepler_str = document.querySelector('textarea').value;
+  })
+  const resKep=arrJoinKepler.join('\r\n');
+  console.log(arrJoinKepler.l)
+  let tle='';
+  arrJoinKepler.forEach(keplerStr=>{
+    const kepler_str = keplerStr;
     console.log(kepler_str)
-
     const parsed_data = parseKeplerianString(kepler_str);
     console.log(parsed_data);
     const kepler_elements = stateVectorToKeplerian(
@@ -648,36 +621,75 @@ function viewDefaulBc(){
       bstar: parsed_data.bstar,
       mean_motion_dot: parsed_data.mean_motion_dot,
     };
-    const rusNamesKepler={
-      e:'Эксцентриситет ',
-      a:'Большая полуось (км)',
-      i:"Наклонение (рад)",
-      raan:'Долгота восходящего узла (рад)',
-      argp:'Аргумент перицентра (рад)',
-      sat_num:'Номер КА',
-      epoch:'Эпоха',
-      nu:'Истинная аномалия (рад)',
-      bstar:'Коэффициент торможения',
-      mean_motion_dot:'Производная среднего движения',
-    }
-    if (Object.keys(updatedKeplerElements).length){
-      for (const key in updatedKeplerElements) {
-        document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
-      }
-    }
-    const parseData=parseKepToObject(kepler_str)
-    console.log(parseData)
-    parseAndDisplayKeplerData(kepler_str);
+    console.log(updatedKeplerElements)
+    const [tle1,tle2] = generateTLEFromKeplerian(updatedKeplerElements);
+    const nameTLE=updatedKeplerElements.sat_num;
+    tle+=`${nameTLE}\r\n${tle1}\r\n${tle2}\r\n`;
+    console.log(tle);
+  })
+  arr= readLinesValue(tle.trimEnd(),{},'get_TLE');
+  document.getElementById('task-btn-TLE').disabled=false;
+
+}
+function viewDefaulBc(){
+  const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
+  getKaDefault(selectedValue,'BC').then(data=>{
+    console.log(data)
+    const dataEnds=convertLineEndings(data)
+    document.getElementById('data-document').innerHTML=``;
+    document.getElementById('BC-document').innerHTML=``;
+    document.getElementById('data-kepler').innerHTML=``;
+    document.getElementById('convert-kepler').innerHTML=``;
+    // console.log(document.getElementById('data-kepler'))
+    // const bcData=document.createElement("textarea");
+    // bcData.innerText=data;
+    // document.getElementById('BC-document').append(bcData);
+    // const kepler_str = document.querySelector('textarea').value;
+    // console.log(kepler_str)
+    //
+    // const parsed_data = parseKeplerianString(kepler_str);
+    // console.log(parsed_data);
+    // const kepler_elements = stateVectorToKeplerian(
+    //     parsed_data.position,
+    //     parsed_data.velocity
+    // );
+    // const updatedKeplerElements = {
+    //   ...kepler_elements,
+    //   sat_num: parsed_data.sat_num,
+    //   epoch: parsed_data.epoch,
+    //   bstar: parsed_data.bstar,
+    //   mean_motion_dot: parsed_data.mean_motion_dot,
+    // };
+    // const rusNamesKepler={
+    //   e:'Эксцентриситет ',
+    //   a:'Большая полуось (км)',
+    //   i:"Наклонение (рад)",
+    //   raan:'Долгота восходящего узла (рад)',
+    //   argp:'Аргумент перицентра (рад)',
+    //   sat_num:'Номер КА',
+    //   epoch:'Эпоха',
+    //   nu:'Истинная аномалия (рад)',
+    //   bstar:'Коэффициент торможения',
+    //   mean_motion_dot:'Производная среднего движения',
+    // }
+    // if (Object.keys(updatedKeplerElements).length){
+    //   for (const key in updatedKeplerElements) {
+    //     document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
+    //   }
+    // }
+    // const parseData=parseKepToObject(kepler_str)
+    // console.log(parseData)
+    // parseAndDisplayKeplerData(kepler_str);
+    viewKeplerDatas(data)
     // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
     document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
     console.log(arr);
 
     document.querySelector('.input-file-text').innerHTML=`Наименование файла: БЦ по умолчанию `;
-    arr= readLinesValue(dataEnds, {},'get_TLEs');
-    console.log(arr);
+    // arr= readLinesValue(dataEnds, {},'get_TLEs');
+    // console.log(arr);
 
-    document.querySelector('.input-file-text').innerHTML=`Наименование файла: TLE по умолчанию`;
     document.getElementById('task-btn-TLE').disabled=false;
   });
 }
@@ -700,7 +712,59 @@ async function getKaDefault(url,typeFile){
 function convertLineEndings(text) {
   return text.replace(/\n/g, '\r\n');
 }
+function  viewKeplerDatas(keplerDatas){
+  const arrKepler =keplerDatas.split('\r\n');
+  arrKepler.forEach(keplerData=>{
+    const bcData=document.createElement("textarea");
+    bcData.innerText=keplerData;
+    document.getElementById('BC-document').append(bcData);
+  })
 
+  const keplerStrs=document.querySelectorAll('textarea');
+    keplerStrs.forEach((keplerStr,i)=>{
+      const kepler_str = keplerStr.value;
+      console.log(kepler_str)
+
+      const parsed_data = parseKeplerianString(kepler_str);
+      console.log(parsed_data);
+      const kepler_elements = stateVectorToKeplerian(
+          parsed_data.position,
+          parsed_data.velocity
+      );
+      const updatedKeplerElements = {
+        ...kepler_elements,
+        sat_num: parsed_data.sat_num,
+        epoch: parsed_data.epoch,
+        bstar: parsed_data.bstar,
+        mean_motion_dot: parsed_data.mean_motion_dot,
+      };
+      const rusNamesKepler={
+        e:'Эксцентриситет ',
+        a:'Большая полуось (км)',
+        i:"Наклонение (рад)",
+        raan:'Долгота восходящего узла (рад)',
+        argp:'Аргумент перицентра (рад)',
+        sat_num:'Номер КА',
+        epoch:'Эпоха',
+        nu:'Истинная аномалия (рад)',
+        bstar:'Коэффициент торможения',
+        mean_motion_dot:'Производная среднего движения',
+      }
+      document.querySelector('#data-kepler').innerHTML+=`<div class="log">КА  ${i+1}:</div>`;
+      if (Object.keys(updatedKeplerElements).length){
+
+        for (const key in updatedKeplerElements) {
+
+          document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
+        }
+        document.querySelector('#data-kepler').innerHTML+=`<br>`;
+      }
+      const parseData=parseKepToObject(kepler_str)
+      console.log(parseData)
+      parseAndDisplayKeplerData(kepler_str,i+1);
+    })
+
+}
 
 
 
@@ -1267,17 +1331,15 @@ function processLine(line,count_line,jsonTLE,tle) {
   
  
 }
-function parseAndDisplayKeplerData(inputString) {
+function parseAndDisplayKeplerData(inputString,i) {
   const outputElement = document.getElementById('convert-kepler');
-
   if (!outputElement) {
     console.error('Элемент с id="convert-kepler" не найден');
     return;
   }
-
   try {
-    const dataParts = inputString.split(';').filter(part => part.trim());
 
+    const dataParts = inputString.split(';').filter(part => part.trim());
     let htmlOutput = '<div class="kepler-data">';
     // htmlOutput += '<div>Данные Кеплера:</div>';
     htmlOutput += '<div class="data-container">';
@@ -1289,6 +1351,8 @@ function parseAndDisplayKeplerData(inputString) {
     console.log(dataParts[0],addressPart,adresPart[0])
     htmlOutput += `
             <div class="data-group">
+            <br>
+            <div class="data-header">КА  ${i}:</div>
                 <div class="data-header">Адресная фраза- Общие данные:</div>
                 <div class="data-value">${dataParts[0]}</div>
                 <div class="data-description">
@@ -1398,7 +1462,7 @@ function parseAndDisplayKeplerData(inputString) {
     }
 
     htmlOutput += '</div></div>';
-    outputElement.innerHTML = htmlOutput;
+    outputElement.innerHTML += htmlOutput;
 
   } catch (error) {
     outputElement.innerHTML = `<p style="color: red;">Ошибка при обработке данных: ${error.message}</p>`;
@@ -1485,52 +1549,53 @@ document.addEventListener('DOMContentLoaded',function(){
           document.getElementById('convert-kepler').innerHTML=``;
           console.log(document.getElementById('data-kepler'))
               console.log(reader.result);
-              const bcData=document.createElement("textarea");
-              bcData.innerText=reader.result;
-
-
-
-              document.getElementById('BC-document').append(bcData);
-              const kepler_str = document.querySelector('textarea').value;
-              console.log(kepler_str)
-
-              const parsed_data = parseKeplerianString(kepler_str);
-              console.log(parsed_data);
-              const kepler_elements = stateVectorToKeplerian(
-                  parsed_data.position,
-                  parsed_data.velocity
-              );
-              const updatedKeplerElements = {
-                ...kepler_elements,
-                sat_num: parsed_data.sat_num,
-                epoch: parsed_data.epoch,
-                bstar: parsed_data.bstar,
-                mean_motion_dot: parsed_data.mean_motion_dot,
-              };
-              const rusNamesKepler={
-                e:'Эксцентриситет ',
-                a:'Большая полуось (км)',
-                i:"Наклонение (рад)",
-                raan:'Долгота восходящего узла (рад)',
-                argp:'Аргумент перицентра (рад)',
-                sat_num:'Номер КА',
-                epoch:'Эпоха',
-                nu:'Истинная аномалия (рад)',
-                bstar:'Коэффициент торможения',
-                mean_motion_dot:'Производная среднего движения',
-
-
-
-
-              }
-              if (Object.keys(updatedKeplerElements).length){
-                for (const key in updatedKeplerElements) {
-                  document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
-                }
-              }
-              const parseData=parseKepToObject(kepler_str)
-              console.log(parseData)
-              parseAndDisplayKeplerData(kepler_str);
+              // const bcData=document.createElement("textarea");
+              // bcData.innerText=reader.result;
+              //
+              //
+              //
+              // document.getElementById('BC-document').append(bcData);
+              // const kepler_str = document.querySelector('textarea').value;
+              // console.log(kepler_str)
+              //
+              // const parsed_data = parseKeplerianString(kepler_str);
+              // console.log(parsed_data);
+              // const kepler_elements = stateVectorToKeplerian(
+              //     parsed_data.position,
+              //     parsed_data.velocity
+              // );
+              // const updatedKeplerElements = {
+              //   ...kepler_elements,
+              //   sat_num: parsed_data.sat_num,
+              //   epoch: parsed_data.epoch,
+              //   bstar: parsed_data.bstar,
+              //   mean_motion_dot: parsed_data.mean_motion_dot,
+              // };
+              // const rusNamesKepler={
+              //   e:'Эксцентриситет ',
+              //   a:'Большая полуось (км)',
+              //   i:"Наклонение (рад)",
+              //   raan:'Долгота восходящего узла (рад)',
+              //   argp:'Аргумент перицентра (рад)',
+              //   sat_num:'Номер КА',
+              //   epoch:'Эпоха',
+              //   nu:'Истинная аномалия (рад)',
+              //   bstar:'Коэффициент торможения',
+              //   mean_motion_dot:'Производная среднего движения',
+              //
+              //
+              //
+              //
+              // }
+              // if (Object.keys(updatedKeplerElements).length){
+              //   for (const key in updatedKeplerElements) {
+              //     document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
+              //   }
+              // }
+              // const parseData=parseKepToObject(kepler_str)
+              // console.log(parseData)
+              // parseAndDisplayKeplerData(kepler_str);
+              viewKeplerDatas(reader.result);
               // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
