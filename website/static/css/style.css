@@ -88,6 +88,13 @@
     font-weight: bold;
     font-family: Arial, sans-serif;
 }
+#convert-kepler{
+    display: flex
+;
+    overflow: auto;
+    flex-direction: column;
+    max-height: 500px;
+}
 #download-tle-surr{
     max-width: 225px;
     margin-bottom: 10px;
@@ -135,7 +142,7 @@
 }
 #BC-document textarea{
     font-size: calc(1.1rem);
-    width: max(250px,30vw);
+    width: max(250px,32vw);
 }
 #task-btn-TLE{
     margin: 20px;
@@ -891,7 +898,7 @@ body {
     display: flex;
     flex-direction: column;
     /*overflow: auto;*/
-    /*max-height: 100px;*/
+    max-height: 200px;
 }
 #prom-data{
     margin-bottom: 10px;
