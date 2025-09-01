@@ -94,6 +94,10 @@
     overflow: auto;
     flex-direction: column;
     max-height: 500px;
+    border: 1px solid black;
+    background-color: white;
+    margin-right: 10px;
+    min-height: 20px;
 }
 #download-tle-surr{
     max-width: 225px;
@@ -142,7 +146,9 @@
 }
 #BC-document textarea{
     font-size: calc(1.1rem);
-    width: max(250px,32vw);
+    /*width: max(250px,32vw);*/
+    /*width: min(830px, 46vw);*/
+    width: 98%
 }
 #task-btn-TLE{
     margin: 20px;
@@ -267,13 +273,16 @@
     display: flex;
     flex-direction: column;
     /*max-height: 200px;*/
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 #data-document{
     min-height: 100px;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    border: 1px solid black;
+    background-color: white;
+    margin-right: 10px;
 }
 label{
     font-size: calc(1.2rem);
@@ -907,6 +916,10 @@ body {
     display: flex;
     flex-direction: column;
     overflow: auto;
+    border: 1px solid black;
+    background-color: white;
+    margin-right: 10px;
+    min-height: 20px;
 }
 /* Контейнер загрузки */
 .loader-container {
