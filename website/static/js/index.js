@@ -581,6 +581,7 @@ function viewDefaulTles(){
   getKaDefault(selectedValue,'TLE').then(data=>{
     console.log(data)
     const dataEnds=convertLineEndings(data)
+    console.log('dataEnds: ',dataEnds)
     document.getElementById('data-document').innerHTML=``;
     document.getElementById('BC-document').innerHTML=``;
     document.getElementById('data-kepler').innerHTML=``;
@@ -680,7 +681,7 @@ function viewDefaulBc(){
     // const parseData=parseKepToObject(kepler_str)
     // console.log(parseData)
     // parseAndDisplayKeplerData(kepler_str);
-    viewKeplerDatas(data)
+    viewKeplerDatas(dataEnds)
     // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
     document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
 
