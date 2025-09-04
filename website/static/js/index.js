@@ -583,6 +583,7 @@ function viewDefaulTles(){
     const dataEnds=convertLineEndings(data)
     console.log('dataEnds: ',dataEnds)
     document.getElementById('data-document').innerHTML=``;
+    document.getElementById('bc-file').innerText=`Содержание файла БЦ:`;
     document.getElementById('BC-document').innerHTML=``;
     document.getElementById('data-kepler').innerHTML=``;
     document.getElementById('convert-kepler').innerHTML=``;
@@ -722,6 +723,7 @@ function  viewKeplerDatas(keplerDatas){
   })
 
   const keplerStrs=document.querySelectorAll('textarea');
+  document.getElementById('bc-file').innerText=`Содержание файла БЦ(Получено данных КА - ${keplerStrs.length}):`;
     keplerStrs.forEach((keplerStr,i)=>{
       const kepler_str = keplerStr.value;
       console.log(kepler_str)
@@ -1544,6 +1546,7 @@ document.addEventListener('DOMContentLoaded',function(){
         
         // при успешном чтении файла выводим его содержимое на веб-страницу
         reader.onload = () => {
+          document.getElementById('bc-file').innerText=`Содержание файла БЦ:`;
           document.getElementById('data-document').innerHTML=``;
           document.getElementById('BC-document').innerHTML=``;
           document.getElementById('data-kepler').innerHTML=``;
@@ -1626,6 +1629,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
         // при успешном чтении файла выводим его содержимое на веб-страницу
         reader.onload = () => {
+          document.getElementById('bc-file').innerText=`Содержание файла БЦ:`;
           console.log(reader.result);
           document.getElementById('data-document').innerHTML=``;
           document.getElementById('BC-document').innerHTML=``;
