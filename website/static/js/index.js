@@ -942,7 +942,6 @@ setInterval(function(){
 }, 0);
 function processLine(line,count_line,jsonTLE,tle) {
   let dataTLE;
-  
   const arrTLENames=['Номер строки_1','KOD_NORAD',
     'TLE_CLASSIFICATION','TLE_INTERNATIONAL_CLASS1',
     'TLE_INTERNATIONAL_CLASS2',
@@ -1148,8 +1147,8 @@ function processLine(line,count_line,jsonTLE,tle) {
           }
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
-          jsonTLE[nameField]=Math.pow(+num,+degree);
-          tle.TLE_KOEF_TORM=Math.pow(+num,+degree);
+          jsonTLE[nameField]=num*Math.pow(10,+degree);
+          tle.TLE_KOEF_TORM=num*Math.pow(10,+degree);
           element='';
           counter+=1;
         }
