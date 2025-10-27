@@ -602,12 +602,42 @@ function keplerToTLE(){
   const keplerStrs=document.querySelectorAll('textarea');
   keplerStrs.forEach(keplerStr=>{
     arrJoinKepler.push(keplerStr.value);
-
   })
   const resKep=arrJoinKepler.join('\r\n');
   console.log(arrJoinKepler.l)
   let tle='';
-  arrJoinKepler.forEach(keplerStr=>{
+  document.getElementById('data-document').innerHTML=``;
+  const objNameTles = {
+    0: 'GONETS-M1 1-1',
+    1: 'GONETS-M1 1-2',
+    2: 'GONETS-M1 1-3',
+    3: 'GONETS-M1 1-4',
+    4: 'GONETS-M1 1-5',
+    5: 'GONETS-M1 1-6',
+    6: 'GONETS-M1 1-7',
+    7: 'GONETS-M1 2-1',
+    8: 'GONETS-M1 2-2',
+    9: 'GONETS-M1 2-3',
+    10: 'GONETS-M1 2-4',
+    11: 'GONETS-M1 2-5',
+    12: 'GONETS-M1 2-6',
+    13: 'GONETS-M1 2-7',
+    14: 'GONETS-M1 3-1',
+    15: 'GONETS-M1 3-2',
+    16: 'GONETS-M1 3-3',
+    17: 'GONETS-M1 3-4',
+    18: 'GONETS-M1 3-5',
+    19: 'GONETS-M1 3-6',
+    20: 'GONETS-M1 3-7',
+    21: 'GONETS-M1 4-1',
+    22: 'GONETS-M1 4-2',
+    23: 'GONETS-M1 4-3',
+    24: 'GONETS-M1 4-4',
+    25: 'GONETS-M1 4-5',
+    26: 'GONETS-M1 4-6',
+    27: 'GONETS-M1 4-7'
+  };
+  arrJoinKepler.forEach((keplerStr,index)=>{
     const kepler_str = keplerStr;
     console.log(kepler_str)
     const parsed_data = parseKeplerianString(kepler_str);
@@ -625,12 +655,14 @@ function keplerToTLE(){
     };
     console.log(updatedKeplerElements)
     const [tle1,tle2] = generateTLEFromKeplerian(updatedKeplerElements);
-    const nameTLE=updatedKeplerElements.sat_num;
+    const nameTLE=objNameTles[index];
     tle+=`${nameTLE}\r\n${tle1}\r\n${tle2}\r\n`;
     console.log(tle);
   })
-  arr= readLinesValue(tle.trimEnd(),{},'get_TLE');
+  console.log('tle.trimEnd()',tle.trimEnd())
+  arr = readLinesValue(tle.trimEnd(),{},'get_TLE');
   document.getElementById('task-btn-TLE').disabled=false;
+
 
 }
 function viewDefaulBc(){
@@ -685,7 +717,7 @@ function viewDefaulBc(){
     viewKeplerDatas(dataEnds)
     // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
     document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
-
+    keplerToTLE()
     console.log(arr);
 
     document.querySelector('.input-file-text').innerHTML=`Наименование файла: БЦ по умолчанию `;
@@ -722,7 +754,7 @@ function  viewKeplerDatas(keplerDatas){
     document.getElementById('BC-document').append(bcData);
   })
 
-  const keplerStrs=document.querySelectorAll('textarea');
+  const keplerStrs=document.querySelectorAll('#BC-document > textarea');
   document.getElementById('bc-file').innerText=`Содержание файла БЦ(Получено данных КА - ${keplerStrs.length}):`;
     keplerStrs.forEach((keplerStr,i)=>{
       const kepler_str = keplerStr.value;
@@ -859,13 +891,18 @@ function readLines(fileReader) {
   
   console.log(arrTLE)
 }
-function readLinesValue(fileReader,keplerData,idElement) {
+function readLinesValue(fileReader,keplerData,idElement,flag=true) {
   let tle= new dataTle();
   let jsonTLE={};
   const arrTLE=[];
   const arrClassTlEs=[];
-   console.log(fileReader);
-  const lines = (fileReader).split("\r\n");
+   console.log(fileReader,'fileReader');
+  let lines
+   if (typeof fileReader == 'string' ) {
+     lines = (fileReader).split("\r\n");
+   }
+   else  lines = fileReader;
+
    console.log(lines)
   let count_line=0;
   for (const line of lines) {
@@ -917,10 +954,10 @@ function readLinesValue(fileReader,keplerData,idElement) {
   dataDocument.classList.add('data-doc');
   arrClassTlEs.forEach(tle=>{
     // dataDocument.innerHTML+=`<div>Результат в виде TLE строки:</div>`;
-    dataDocument.innerHTML+=`<div>${tle.NAIM}</div>`;
-    dataDocument.innerHTML+=`<div>${tle.TLE_LINE1}</div>`;
-    dataDocument.innerHTML+=`<div>${tle.TLE_LINE2}</div>`;
-    dataDocument.innerHTML+=`<br>`;
+    dataDocument.innerHTML+=`<textarea>${tle.NAIM}</textarea>`;
+    dataDocument.innerHTML+=`<textarea>${tle.TLE_LINE1}</textarea>`;
+    dataDocument.innerHTML+=`<textarea>${tle.TLE_LINE2}</textarea>`;
+    // dataDocument.innerHTML+=`<br>`;
     // if (Object.keys(keplerData).length){
     //   dataDocument.innerHTML+=`<div>Данные полученные из Кеплеровского формата:</div>`;
     //   for (const key in keplerData) {
@@ -929,8 +966,10 @@ function readLinesValue(fileReader,keplerData,idElement) {
     // }
 
   })
-  
-  document.getElementById('data-document').append(dataDocument);
+  if (flag){
+    document.getElementById('data-document').append(dataDocument);
+  }
+
   
   return arrClassTlEs
   // document.querySelector('.information_request').innerHTML+=`<div>Полученные данные:${JSON.stringify(arrClassTlEs)}</div>`;
@@ -1047,7 +1086,7 @@ function processLine(line,count_line,jsonTLE,tle) {
         if (i==19) {
 
           element+=dataTLE[i];
-          console.log(element)
+          // console.log(element)
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=Number(element);
         tle.TLE_EPOCH_YEAR=Number(element);
@@ -1062,7 +1101,7 @@ function processLine(line,count_line,jsonTLE,tle) {
         }
       }
       else if (i>19 && i<32) {
-        console.log(dataTLE[31])
+        // console.log(dataTLE[31])
         if (i===31) {
           element+=dataTLE[i];
           const nameField=arrTLENames[counter];
@@ -1079,12 +1118,12 @@ function processLine(line,count_line,jsonTLE,tle) {
         }
       }
       else if (i>32 && i<43) {
-        console.log(element,i)
+        // console.log(element,i)
         if (i==42) {
           element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         let correctElem
-          console.log(element[0])
+          // console.log(element[0])
         if (element[0]==' ') {
           correctElem=element.replace(/\s/,'0');
         }
@@ -1169,7 +1208,7 @@ function processLine(line,count_line,jsonTLE,tle) {
       else if (i>63 && i<68) {
 
         if (i==67) {
-          console.log(element)
+          // console.log(element)
           element+=dataTLE[i];
         const nameField=arrTLENames[counter];
         jsonTLE[nameField]=+element;
@@ -1497,17 +1536,29 @@ function eventSend(){
   }else {
     idElem='get_TLEs'
   }
+  const arrTles=[...document.querySelectorAll('.data-doc textarea')].map(dataTle=>dataTle.value);
+
+  console.log(arrTles,'arrTles');
+
+  arr= readLinesValue(arrTles, {},'get_TLEs',false);
+
   showBegLogRequest(arr,'#comtainer-logs',idElem);
   // showBegLogRequest(arr,'.column2_TLE',idElem);
+  document.getElementById('task-btn-TLE').disabled=true;
+  arr.forEach(dataTle=>{
+    dataTle.NAIM = dataTle.NAIM.replace(/\n/g, "");
+    dataTle.NAIM_RUS = dataTle.NAIM_RUS.replace(/\n/g, "")
+    dataTle.TLE_NAME = dataTle.TLE_NAME.replace(/\n/g, "")
+  })
   postKA(arr,selectedValue)
   .then(()=>{
-
     console.log(idElem)
-
     showEndLogRequest('#comtainer-logs');
     // showEndLogRequest('.column2_TLE');
-    document.getElementById('task-btn-TLE').disabled=true;
+
   })
+  console.log(arr,'arr');
+  document.getElementById('task-btn-TLE').disabled=true;
 }
 let arr=[];
 function logKepler(keplerData){

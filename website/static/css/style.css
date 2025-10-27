@@ -304,6 +304,9 @@
     /*max-height: 200px;*/
     /*margin-top: 10px;*/
 }
+.data-doc textarea{
+    min-height: 30px;
+}
 #data-document{
     min-height: 150px;
     display: flex
