@@ -150,7 +150,7 @@ function generateTLEFromKeplerian(keplerParams) {
   const mu = 398600.4418;
   const nRadPerSec = Math.sqrt(mu / Math.max(a, 1.0));
   let nRevPerDay = (nRadPerSec * 86400) / (2 * Math.PI);
-  nRevPerDay = Math.max(0.99, Math.min(17.0, nRevPerDay));
+  nRevPerDay = Math.max(0.99, Math.min(12.0, nRevPerDay));
 
   // Преобразование аномалий
   const E = 2 * Math.atan2(
