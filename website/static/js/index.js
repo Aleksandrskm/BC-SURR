@@ -90,7 +90,29 @@ class dataTle
       this.TLE_CONTROL_SUM_LINE2=TLE_CONTROL_SUM_LINE2;
   }
 }
+// http://127.0.0.1:8000/ka/recalculate
+async function recalculateKas(url){
+  try {
+    const response = await fetch(`http://${url}/ka/recalculate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        "X-Source":73
+      },
+    });
+    if (response.ok) {
+      const result = await response;
+      return result;
+    }
+    else {
+      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error("Error recalculating KAS:", error);
+    throw error;
+  }
 
+}
 function formatDateToCustomString(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -864,6 +886,13 @@ function showEndLogRequest(selector){
   document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Время ответа: 
   <br>${new Date().toLocaleString()}</span>`;
   document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Данные успешно добавлены</span>`
+  setTimeout(() => {
+    const container = document.querySelector(`#comtainer-logs`);
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, 300);
+
 
 }
 function readLines(fileReader) {
@@ -1553,7 +1582,10 @@ function eventSend(){
   postKA(arr,selectedValue)
   .then(()=>{
     console.log(idElem)
-    showEndLogRequest('#comtainer-logs');
+    recalculateKas(selectedValue).then((res)=>{
+      showEndLogRequest('#comtainer-logs');
+    })
+
     // showEndLogRequest('.column2_TLE');
 
   })
