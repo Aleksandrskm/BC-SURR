@@ -97,10 +97,10 @@
     align-self: center;
 }
 .data-header{
-    font-size: calc(1.1rem);
+    font-size: calc(1.3rem);
 }
 .data-header-min{
-    font-size: calc(1rem);
+    font-size: calc(1.2rem);
 }
 #view-btn-kepler{
     max-width: 225px;
@@ -115,6 +115,9 @@
     font-weight: bold;
     font-family: Arial, sans-serif;
 }
+/*.data-value{*/
+/*    font-size: calc(1.1rem);*/
+/*}*/
 #convert-kepler{
     display: flex
 ;
@@ -125,6 +128,9 @@
     background-color: white;
     margin-right: 10px;
     min-height: 20px;
+}
+.data-container{
+    font-size: calc(1.1rem);
 }
 #download-tle-surr{
     max-width: 225px;
@@ -285,9 +291,14 @@
     font-weight: bold;
     font-family: Arial, sans-serif
 }
-
+.data-group ,#data-kepler{
+    font-weight: 400;
+}
 .row_TLE{
     /*text-align: center;*/
+}
+.data-doc textarea{
+    font-size: calc(1.1rem)
 }
 .name-document{
     display: flex;
@@ -942,8 +953,39 @@ body {
     flex-direction: column;
     overflow: auto;
 }
-.log{
+/*.log{*/
+/*    font-size: calc(1rem);*/
+/*}*/
+.mdl-dialog{
+
+    position: fixed;
+    /*top: 40vh;*/
+    left: 0;
+    z-index: 1050;
+    background-color: #fff;
+    border: 2px solid rgba(0, 0, 0, .2);
+}
+.dialog-div{
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+dialog button{
+    box-sizing: border-box;
+
+    text-align: center;
+    border-radius: 6px;
+    border-width: 1px;
     font-size: calc(1rem);
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+.popup{
+    display: flex;
+    flex-direction: column;
+}
+body:has(dialog[open]) {
+    overflow: hidden;
 }
 #kepler-data{
     display: flex;

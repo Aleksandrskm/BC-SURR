@@ -269,7 +269,21 @@ function radToDeg(radians) {
   let degrees = (radians * 180) / Math.PI;
   return ((degrees % 360) + 360) % 360;  // Нормализует даже отрицательные углы
 }
-
+function renderPopup(popupElement,message){
+  const div = document.createElement("div");
+  popupElement.innerHTML=` <button type="button" onclick="this.closest('dialog').classList.remove('popup');this.closest('dialog').close();">
+        Закрыть
+    </button>`;
+  div.textContent=message;
+  div.classList.add('dialog-div');
+  popupElement.prepend(div);
+  popupElement.classList.add('popup');
+  popupElement.showModal()
+  setTimeout(()=>{
+    popupElement.classList.remove('popup')
+    popupElement.close()
+  },5000)
+}
 function  parseKepToObject(keplerStr){
   const parts = keplerStr
       .split(';')
@@ -822,9 +836,6 @@ function  viewKeplerDatas(keplerDatas){
     })
 
 }
-
-
-
 function getRandomNumber(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
@@ -876,23 +887,26 @@ function showBegLogRequest(arrClassTlEs,selector,idElement){
         }
 
   }
-  document.querySelector(selector).innerHTML+=`<br><div>Время отправки запроса: ${new Date().toLocaleString()}</div>`;
+  document.querySelector(selector).innerHTML+=`<br><div>Время начала отправки данных БД: ${new Date().toLocaleString()}</div>`;
 }
 function showEndLogRequest(selector){
   const logIn=document.createElement('div');
   logIn.innerHTML+=`<br>`;
   logIn.innerHTML+=`<span style="font-size: calc(1.2rem);">Завершение сеанса:</span>`
   document.querySelector(`${selector}`).append(logIn);
-  document.querySelector(`${selector}`).innerHTML+=`<span class='header-log'>Время ответа: 
-  <br>${new Date().toLocaleString()}</span>`;
-  document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Данные успешно добавлены</span>`
+  document.querySelector(`${selector}`).innerHTML+=`<div>Время ответа о завершении получения данных и перерасчета местоположения КА: 
+  <br>${new Date().toLocaleString()}</div>`;
+  document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Данные успешно обновлены</span>`
   setTimeout(() => {
     const container = document.querySelector(`#comtainer-logs`);
     if (container) {
-      container.scrollTop = container.scrollHeight;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
+      renderPopup(document.querySelector('#dialog-res'),`Данные успешно обновлены`)
     }
-  }, 300);
-
+  }, 300)
 
 }
 function readLines(fileReader) {
@@ -1446,7 +1460,7 @@ function parseAndDisplayKeplerData(inputString,i) {
                 <div class="data-value">${dataParts[1]}</div>
                 <div class="data-description">
                 <br>
-                    <div class="data-header-min">Состав первой фразы:</div>
+                    <div class="data-header-min">Состав фразы:</div>
                     <span>Номер КА: ${firstPhrase[0].split('.')[1] || 'не указан'}; </span>
                     <span>Номер системы координат: ${firstPhrase[1] || 'не указан'}; </span>
                     <span>Номер витка: ${firstPhrase[2] || 'не указан'}; </span>
@@ -1460,6 +1474,8 @@ function parseAndDisplayKeplerData(inputString,i) {
              <br>
                 <div class="data-header">Фраза 2 - Дата задания параметров:</div>
                 <div class="data-value">${dataParts[2]}</div>
+                 <div class="data-header-min">Состав фразы:</div>
+                  <span>дд.мм.гггг; </span>
             </div>`;
 
     // Третья фраза - время
@@ -1470,6 +1486,8 @@ function parseAndDisplayKeplerData(inputString,i) {
                 <div class="data-header">Фраза 3 - Время задания параметров:</div>
                 <div class="data-value">${dataParts[3]}</div>
                 <div class="data-description">
+                 <div class="data-header-min">Состав фразы:</div>
+                 <span>UTC +00:00:00; </span>
             </div>`;
 
     // Фразы 4-9 - ВКП (Вектор состояния космического аппарата)
@@ -1481,6 +1499,29 @@ function parseAndDisplayKeplerData(inputString,i) {
     for (let i = 4; i <= 9; i++) {
       if (dataParts[i]) {
         const value = dataParts[i].substring(2);
+        let axis=''
+        let lat=0;
+        let long=0;
+        let typeVkp=`Расстояние по оси`
+        if (i===4 ||  i===7){
+          axis='X'
+          typeVkp=`Расстояние по оси`;
+        }
+        else if (i===5 || i===8){
+          axis='Y';
+          long=90;
+          typeVkp=`Расстояние по оси`;
+        }
+        else if (i===6 ||  i===9){
+          axis='Z';
+          lat=90;
+          typeVkp=`Расстояние по оси`;
+        }
+        if (i>6)
+        {
+          typeVkp=`Проекция скорости по оси`;
+        }
+        console.log(typeVkp,'typeVkp')
         htmlOutput += `
                     <div class="data-group">
                      <br>
@@ -1490,6 +1531,8 @@ function parseAndDisplayKeplerData(inputString,i) {
                             <span>${vkpLabels[i-4]}:</span>
                             <span>${value}</span>
                         </div>
+                         <div class="data-header-min">Состав фразы:</div>
+                         <span>${typeVkp} ${axis} Центр Земли - точка (${lat};${long}) (ш;д) градусов на поверхности Земли;</span>
                     </div>`;
       }
     }
@@ -1535,7 +1578,7 @@ function parseAndDisplayKeplerData(inputString,i) {
     outputElement.innerHTML += htmlOutput;
 
   } catch (error) {
-    outputElement.innerHTML = `<p style="color: red;">Ошибка при обработке данных: ${error.message}</p>`;
+    outputElement.innerHTML = `<p style="color: red;">Ошибка при обработке данных</p>`;
     console.error('Ошибка парсинга:', error);
   }
 }
@@ -1571,7 +1614,7 @@ function eventSend(){
 
   arr= readLinesValue(arrTles, {},'get_TLEs',false);
 
-  showBegLogRequest(arr,'#comtainer-logs',idElem);
+
   // showBegLogRequest(arr,'.column2_TLE',idElem);
   document.getElementById('task-btn-TLE').disabled=true;
   arr.forEach(dataTle=>{
@@ -1582,6 +1625,8 @@ function eventSend(){
   postKA(arr,selectedValue)
   .then(()=>{
     console.log(idElem)
+    showBegLogRequest(arr,'#comtainer-logs',idElem);
+    renderPopup(document.querySelector('#dialog-res'),`Данные КА отправились на БД для обновления`)
     recalculateKas(selectedValue).then((res)=>{
       showEndLogRequest('#comtainer-logs');
     })

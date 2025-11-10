@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+<dialog   class="mdl-dialog" id="dialog-res">
+    <button type="button" onclick="this.closest('dialog').classList.add('hidden');this.closest('dialog').close();">
+        Закрыть
+    </button>
+</dialog>
 <main>
     <div class="wraper-top" style="
     display: flex;
