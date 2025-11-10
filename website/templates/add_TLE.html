@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+<dialog   class="mdl-dialog" id="dialog-res">
+    <button type="button" onclick="this.closest('dialog').classList.add('hidden');this.closest('dialog').close();">
+        Закрыть
+    </button>
+</dialog>
 <main>
     <div class="wraper-top" style="
     display: flex;
@@ -16,7 +21,7 @@
                 <label for="bd-real">Основная</label>
             </div>
             <div class="bd-elem">
-                <input type="radio" name="type_bd" value="185.192.247.60:7130" id="bd-test" checked="">
+                <input type="radio" name="type_bd" value="127.0.0.1:8000" id="bd-test" checked="">
                 <label for="bd-test">Тестовая</label>
             </div>
 
