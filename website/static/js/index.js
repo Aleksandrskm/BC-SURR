@@ -271,10 +271,13 @@ function radToDeg(radians) {
 }
 function renderPopup(popupElement,message){
   const div = document.createElement("div");
-  popupElement.innerHTML=` <button type="button" onclick="this.closest('dialog').classList.remove('popup');this.closest('dialog').close();">
-        Закрыть
-    </button>`;
-  div.textContent=message;
+  const p=document.createElement("p");
+  // popupElement.innerHTML=` <button type="button" onclick="this.closest('dialog').classList.remove('popup');this.closest('dialog').close();">
+  //       Закрыть
+  //   </button>`;
+  popupElement.innerHTML=``;
+  p.innerHTML=message;
+  div.append(p);
   div.classList.add('dialog-div');
   popupElement.prepend(div);
   popupElement.classList.add('popup');
@@ -1626,7 +1629,7 @@ function eventSend(){
   .then(()=>{
     console.log(idElem)
     showBegLogRequest(arr,'#comtainer-logs',idElem);
-    renderPopup(document.querySelector('#dialog-res'),`Данные КА отправились на БД для обновления`)
+    renderPopup(document.querySelector('#dialog-res'),`Данные  отправлены <br> Ожидайте сообщения о пересчете местоположения КА`)
     recalculateKas(selectedValue).then((res)=>{
       showEndLogRequest('#comtainer-logs');
     })
