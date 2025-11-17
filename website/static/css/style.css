@@ -260,7 +260,7 @@
 	/* background-color:  #999999; */
 	line-height: 22px;
 	height: 40px;
-	padding: 10px 20px;
+	/*padding: 10px 20px;*/
 	box-sizing: border-box;
 	border: none;
 	margin: 0;
@@ -278,6 +278,8 @@
     font-size: calc(1rem);
     font-weight: bold;
     font-family: Arial, sans-serif;
+    padding: 8px;
+    box-sizing: border-box;
 }
 #download-tle{
     height: 40px;
@@ -877,6 +879,24 @@ body {
 }
 .bd-elem{
     margin-right: 50px;
+}
+.btn-load.bc-btns{
+    height: 55px;
+    padding: 0 12px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    margin-right: 10px;
 }
 .btn2 {
     margin-top: 10px;
