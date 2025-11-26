@@ -1,17 +1,24 @@
 import {DataTle} from "../../models/DataTle.js";
 export class TleParser{
     constructor(){}
-    #parseTLELine(line,count_line,tle) {
+
+    /**
+     * парсит строку в TLE формате и записывает результат в экземпляр класса TLE.
+     * @param  { String } line - Строка TLE для парса.
+     * @param  { Number } countLine - позиция строки в документе.
+     * @param  { DataTle } tle - объект TLE для записи данных.
+     */
+    #parseTLELine(line,countLine,tle) {
         let dataTLE;
         dataTLE=line;
         let element='';
         let counter=0;
-        if (count_line==0) {
+        if (countLine==0) {
             tle.TLE_NAME=dataTLE;
             tle.NAIM=dataTLE;
             tle.NAIM_RUS= dataTLE.replace('GONETS','Гонец')
         }
-        else if (count_line==1) {
+        else if (countLine==1) {
             tle.TLE_LINE1=dataTLE;
             for (let i = 0; i < dataTLE.length; i++) {
                 if (i==0) {
@@ -161,7 +168,7 @@ export class TleParser{
                 }
             }
         }
-        else if (count_line==2) {
+        else if (countLine==2) {
             tle.TLE_LINE2=dataTLE;
             for (let i = 0; i < dataTLE.length; i++) {
                 if (i==0) {
@@ -267,6 +274,11 @@ export class TleParser{
             }
         }
     }
+
+    /**
+     * форматирует данные коэффициента торможения TLE строки.
+     * @param  { Number } bstarValue -значение коэффициента торможения.
+     */
     #formatBstar(bstarValue) {
         // Ограничиваем значение (0.0 ≤ B* ≤ 0.999999)
         const absBstar = Math.min(0.999999, Math.max(0.0, Math.abs(bstarValue)));
@@ -288,6 +300,11 @@ export class TleParser{
         // Форматируем в "NNNNN±E" (5 цифр + знак + 1 цифра экспоненты)
         return ` ${mantissaDigits}${sign}${Math.abs(tleExponent)}`;
     }
+
+    /**
+     * форматирует данные даты для корректного отображения TLE.
+     * @param  { String } dateString -строка в формате 2024-09-08 17:00:05.982000.
+     */
     #convertToEpochTime(dateString) {
         const date = new Date(dateString);
         // Проверка на валидность даты
@@ -311,8 +328,12 @@ export class TleParser{
         // Форматируем результат
         return `${shortYear}${formattedDayOfYear}${fractionalPart}`;
     }
+
+    /**
+     * Генерирует валидный TLE из кеплеровских параметров с проверкой границ.
+     * @param  { Object } keplerParams - объект с Кеплеровскими параметрами для парса в TLE.
+     */
     #generateTLEFromKeplerian(keplerParams) {
-        /** Генерирует валидный TLE из кеплеровских параметров с проверкой границ */
         let {
             sat_num: satNum,
             epoch, // ожидается строка в формате "2024-09-08 17:00:05.982000"
@@ -326,21 +347,21 @@ export class TleParser{
             mean_motion_dot: meanMotionDot = 0.0,
         } = keplerParams;
 
-        // Преобразование строки даты в объект Date
-        function parseDateString(dateStr) {
-            const [datePart, timePart] = dateStr.split(' ');
-            const [year, month, day] = datePart.split('-').map(Number);
-            const [hours, minutes, seconds] = timePart.split(':');
-            const [sec, millis] = seconds.split('.');
-
-            return new Date(
-                year, month - 1, day,
-                Number(hours), Number(minutes), Number(sec),
-                Number(millis.substring(0, 3)) // берем только миллисекунды
-            );
-        }
-
-        const epochDate = typeof epoch === 'string' ? parseDateString(epoch) : epoch;
+        // // Преобразование строки даты в объект Date
+        // function parseDateString(dateStr) {
+        //     const [datePart, timePart] = dateStr.split(' ');
+        //     const [year, month, day] = datePart.split('-').map(Number);
+        //     const [hours, minutes, seconds] = timePart.split(':');
+        //     const [sec, millis] = seconds.split('.');
+        //
+        //     return new Date(
+        //         year, month - 1, day,
+        //         Number(hours), Number(minutes), Number(sec),
+        //         Number(millis.substring(0, 3)) // берем только миллисекунды
+        //     );
+        // }
+        //
+        // const epochDate = typeof epoch === 'string' ? parseDateString(epoch) : epoch;
 
         // Проверка и корректировка параметров
         const checkedSatNum = Math.max(0, Math.min(99999, +(satNum)));
@@ -394,6 +415,11 @@ export class TleParser{
 
         return [tleLine1, tleLine2];
     }
+
+    /**
+     * парсит документ TLE.
+     * @param  { Array,String } fileReader - документ содержащий все данные TLE.
+     */
     parseTLEFile(fileReader) {
         let tle= new DataTle();
         const arrClassTlEs=[];
@@ -404,15 +430,15 @@ export class TleParser{
         }
         else  lines = fileReader;
         console.log(lines)
-        let count_line=0;
+        let countLine=0;
         for (const line of lines) {
-            if (count_line===3) {
-                count_line=0
+            if (countLine===3) {
+                countLine=0
                 arrClassTlEs.push(tle);
                 tle=new dataTle();
             }
-            this.#parseTLELine(line,count_line,tle);
-            count_line++;
+            this.#parseTLELine(line,countLine,tle);
+            countLine++;
         }
         arrClassTlEs.push(tle);
         console.log(arrClassTlEs);
@@ -433,8 +459,14 @@ export class TleParser{
         return arrClassTlEs
 
     }
-    getTleLinesFromKepler(keplerValues){
-        const objNameTles = {
+
+    /**
+     * получение TLE строки из кеплеровских параметров.
+     * @param  { Object } updatedKeplerElements - документ содержащий все данные TLE.
+     * @param  { Number } indexLKa - документ содержащий все данные TLE.
+     */
+    getTleLinesFromKepler(updatedKeplerElements,indexLKa){
+        const namesTleKA = {
             0: 'GONETS-M1 1-1',
             1: 'GONETS-M1 1-2',
             2: 'GONETS-M1 1-3',
@@ -464,29 +496,8 @@ export class TleParser{
             26: 'GONETS-M1 4-6',
             27: 'GONETS-M1 4-7'
         };
-        let tle=``;
-        keplerValues.forEach((keplerStr,index)=>{
-            const kepler_str = keplerStr;
-            console.log(kepler_str)
-            const parsed_data = parseKeplerianString(kepler_str);
-            console.log(parsed_data);
-            const kepler_elements = stateVectorToKeplerian(
-                parsed_data.position,
-                parsed_data.velocity
-            );
-            const updatedKeplerElements = {
-                ...kepler_elements,
-                sat_num: parsed_data.sat_num,
-                epoch: parsed_data.epoch,
-                bstar: parsed_data.bstar,
-                mean_motion_dot: parsed_data.mean_motion_dot,
-            };
-            console.log(updatedKeplerElements)
-            const [tle1,tle2] = this.#generateTLEFromKeplerian(updatedKeplerElements);
-            const nameTLE=objNameTles[index];
-            tle+=`${nameTLE}\r\n${tle1}\r\n${tle2}\r\n`;
-            console.log(tle);
-        })
-        return tle
+        const [tle1,tle2] = this.#generateTLEFromKeplerian(updatedKeplerElements);
+        const nameTleKa=namesTleKA[indexLKa];
+        return `${nameTleKa}\r\n${tle1}\r\n${tle2}\r\n`;
     }
 }

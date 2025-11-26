@@ -643,7 +643,6 @@ function keplerToTLE(){
     arrJoinKepler.push(keplerStr.value);
   })
   const resKep=arrJoinKepler.join('\r\n');
-  console.log(arrJoinKepler.l)
   let tle='';
   document.getElementById('data-document').innerHTML=``;
   const objNameTles = {
@@ -701,8 +700,6 @@ function keplerToTLE(){
   console.log('tle.trimEnd()',tle.trimEnd())
   arr = readLinesValue(tle.trimEnd(),{},'get_TLE');
   document.getElementById('task-btn-TLE').disabled=false;
-
-
 }
 function viewDefaulBc(){
   const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
@@ -713,56 +710,11 @@ function viewDefaulBc(){
     document.getElementById('BC-document').innerHTML=``;
     document.getElementById('data-kepler').innerHTML=``;
     document.getElementById('convert-kepler').innerHTML=``;
-    // console.log(document.getElementById('data-kepler'))
-    // const bcData=document.createElement("textarea");
-    // bcData.innerText=data;
-    // document.getElementById('BC-document').append(bcData);
-    // const kepler_str = document.querySelector('textarea').value;
-    // console.log(kepler_str)
-    //
-    // const parsed_data = parseKeplerianString(kepler_str);
-    // console.log(parsed_data);
-    // const kepler_elements = stateVectorToKeplerian(
-    //     parsed_data.position,
-    //     parsed_data.velocity
-    // );
-    // const updatedKeplerElements = {
-    //   ...kepler_elements,
-    //   sat_num: parsed_data.sat_num,
-    //   epoch: parsed_data.epoch,
-    //   bstar: parsed_data.bstar,
-    //   mean_motion_dot: parsed_data.mean_motion_dot,
-    // };
-    // const rusNamesKepler={
-    //   e:'Эксцентриситет ',
-    //   a:'Большая полуось (км)',
-    //   i:"Наклонение (рад)",
-    //   raan:'Долгота восходящего узла (рад)',
-    //   argp:'Аргумент перицентра (рад)',
-    //   sat_num:'Номер КА',
-    //   epoch:'Эпоха',
-    //   nu:'Истинная аномалия (рад)',
-    //   bstar:'Коэффициент торможения',
-    //   mean_motion_dot:'Производная среднего движения',
-    // }
-    // if (Object.keys(updatedKeplerElements).length){
-    //   for (const key in updatedKeplerElements) {
-    //     document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
-    //   }
-    // }
-    // const parseData=parseKepToObject(kepler_str)
-    // console.log(parseData)
-    // parseAndDisplayKeplerData(kepler_str);
     viewKeplerDatas(dataEnds)
-    // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
     document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
     keplerToTLE()
     console.log(arr);
-
     document.querySelector('.input-file-text').innerHTML=`Наименование файла: БЦ по умолчанию `;
-    // arr= readLinesValue(dataEnds, {},'get_TLEs');
-    // console.log(arr);
-
     document.getElementById('task-btn-TLE').disabled=false;
   });
 }
@@ -826,15 +778,13 @@ function  viewKeplerDatas(keplerDatas){
       }
       document.querySelector('#data-kepler').innerHTML+=`<div class="log">КА  ${i+1}:</div>`;
       if (Object.keys(updatedKeplerElements).length){
-
         for (const key in updatedKeplerElements) {
-
           document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
         }
         document.querySelector('#data-kepler').innerHTML+=`<br>`;
       }
-      const parseData=parseKepToObject(kepler_str)
-      console.log(parseData)
+      // const parseData=parseKepToObject(kepler_str)
+      // console.log(parseData)
       parseAndDisplayKeplerData(kepler_str,i+1);
     })
 
@@ -874,15 +824,10 @@ function getDateTime() {
 function showBegLogRequest(arrClassTlEs,selector,idElement){
   document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса: ${new Date().toLocaleString()}</span>`;
   const c=document.querySelector('.input-file-text');
-
-
-    // document.querySelector(selector).innerHTML+= `<span>${new Date().toLocaleString()}</span>`;
-    // let countIdTle=1;
     for (let datasTle of arrClassTlEs) {
       const logIn=document.createElement('div');
       logIn.innerHTML+=`<br>`;
-      // logIn.innerHTML+=`<div>ID:${countIdTle}</div>`;
-      // countIdTle+=1;
+
         for(let fieldTLE in datasTle)
         {
           logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
@@ -948,7 +893,6 @@ function readLinesValue(fileReader,keplerData,idElement,flag=true) {
      lines = (fileReader).split("\r\n");
    }
    else  lines = fileReader;
-
    console.log(lines)
   let count_line=0;
   for (const line of lines) {
@@ -967,58 +911,24 @@ function readLinesValue(fileReader,keplerData,idElement,flag=true) {
   arrClassTlEs.push(tle);
   console.log(arrClassTlEs);
   console.log(arrTLE);
-  // document.querySelector('.column2_TLE').innerHTML=JSON.stringify(arrClassTlEs);
- 
-  // document.querySelector('.column2_TLE').innerHTML+=`<br><span class='header-log'>Начало сеанса:</span><br>`;
-  // let nameFile=document.createElement('span');
-  // document.querySelector('.name-document').innerHTML='';
-  // nameFile.classList.add('header-log');
-  // nameFile.innerHTML=`Файл: ${document.getElementById(`${idElement}`).files[0].name}
-  // ${new Date().toLocaleString()}`;
-  // document.querySelector('.name-document').append(nameFile);
   
   for(let i=0;i<arrClassTlEs.length;i++){
     arrClassTlEs[i].DATA_BEG=String(new Date().toISOString()).replace('Z','+00:00');
     arrClassTlEs[i].ID=i+1;
     
   }
-  // document.querySelector('.column2_TLE').innerHTML+=`<br><span style="
-  //            font-size: calc(1.2rem);">Полученные данные:<br></span><span>${JSON.stringify(arrClassTlEs)}</span>`;
-  // for (let datasTle of arrClassTlEs) {
-  //   const logIn=document.createElement('div');
-  //   logIn.innerHTML+=`<br>`;
-  //   for(let fieldTLE in datasTle)
-  //   {
-  //     logIn.innerHTML+=`<div> ${fieldTLE}:${(datasTle[fieldTLE])}</div>`;
-     
-  //   }
-  //   document.querySelector('.column2_TLE').append(logIn);
-  // }
-  // document.getElementById('data-kepler').innerHTML=``;
-  // document.getElementById('data-document').innerHTML+=``
   const dataDocument=document.createElement('div');
   dataDocument.classList.add('data-doc');
   arrClassTlEs.forEach(tle=>{
-    // dataDocument.innerHTML+=`<div>Результат в виде TLE строки:</div>`;
     dataDocument.innerHTML+=`<textarea>${tle.NAIM}</textarea>`;
     dataDocument.innerHTML+=`<textarea>${tle.TLE_LINE1}</textarea>`;
     dataDocument.innerHTML+=`<textarea>${tle.TLE_LINE2}</textarea>`;
-    // dataDocument.innerHTML+=`<br>`;
-    // if (Object.keys(keplerData).length){
-    //   dataDocument.innerHTML+=`<div>Данные полученные из Кеплеровского формата:</div>`;
-    //   for (const key in keplerData) {
-    //     dataDocument.innerHTML+=`<div>${key}: ${keplerData[key]}</div>`;
-    //   }
-    // }
-
   })
   if (flag){
     document.getElementById('data-document').append(dataDocument);
   }
-
-  
   return arrClassTlEs
-  // document.querySelector('.information_request').innerHTML+=`<div>Полученные данные:${JSON.stringify(arrClassTlEs)}</div>`;
+
 }
 // example usage: realtime clock
 setInterval(function(){
@@ -1683,60 +1593,12 @@ document.addEventListener('DOMContentLoaded',function(){
           document.getElementById('convert-kepler').innerHTML=``;
           console.log(document.getElementById('data-kepler'))
               console.log(reader.result);
-              // const bcData=document.createElement("textarea");
-              // bcData.innerText=reader.result;
-              //
-              //
-              //
-              // document.getElementById('BC-document').append(bcData);
-              // const kepler_str = document.querySelector('textarea').value;
-              // console.log(kepler_str)
-              //
-              // const parsed_data = parseKeplerianString(kepler_str);
-              // console.log(parsed_data);
-              // const kepler_elements = stateVectorToKeplerian(
-              //     parsed_data.position,
-              //     parsed_data.velocity
-              // );
-              // const updatedKeplerElements = {
-              //   ...kepler_elements,
-              //   sat_num: parsed_data.sat_num,
-              //   epoch: parsed_data.epoch,
-              //   bstar: parsed_data.bstar,
-              //   mean_motion_dot: parsed_data.mean_motion_dot,
-              // };
-              // const rusNamesKepler={
-              //   e:'Эксцентриситет ',
-              //   a:'Большая полуось (км)',
-              //   i:"Наклонение (рад)",
-              //   raan:'Долгота восходящего узла (рад)',
-              //   argp:'Аргумент перицентра (рад)',
-              //   sat_num:'Номер КА',
-              //   epoch:'Эпоха',
-              //   nu:'Истинная аномалия (рад)',
-              //   bstar:'Коэффициент торможения',
-              //   mean_motion_dot:'Производная среднего движения',
-              //
-              //
-              //
-              //
-              // }
-              // if (Object.keys(updatedKeplerElements).length){
-              //   for (const key in updatedKeplerElements) {
-              //     document.querySelector('#data-kepler').innerHTML+=`<div class="log">${rusNamesKepler[key]}: ${updatedKeplerElements[key]}</div>`;
-              //   }
-              // }
-              // const parseData=parseKepToObject(kepler_str)
-              // console.log(parseData)
-              // parseAndDisplayKeplerData(kepler_str);
               viewKeplerDatas(reader.result);
               // renderToRussianHTML(parseData,document.getElementById('convert-kepler'));
               document.getElementById('view-btn-kepler').addEventListener('click',keplerToTLE)
-
               console.log(arr);
               console.log(document.getElementById('get_TLE').files[0].name);
               document.querySelector('.input-file-text').innerHTML=`Наименование файла: ${document.getElementById('get_TLE').files[0].name}`;
-
               // для разделения, если выбрано несколько файлов
               console.log("==============================");
               // console.log(jsonTLE);

@@ -1,4 +1,9 @@
 'use strict'
+/**
+ * Отображает исчезающие сообщение на экране.
+ * @param {Element} dialogElement - элемент для визуализации.
+ * @param {String} message - сообщение для отображения.
+ */
 function renderPopup(dialogElement,message){
     const elementDivPopup = document.createElement("div");
     const elementParagraphPopup=document.createElement("p");
