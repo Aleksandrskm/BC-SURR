@@ -112,7 +112,7 @@ async function recalculateKas(url){
     throw error;
   }
 
-}
+}//+
 function formatDateToCustomString(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -263,12 +263,12 @@ function generateTLEFromKeplerian(keplerParams) {
       `${Math.floor(Math.abs(meanMotionDot) * 1e10)} ${''.toString().padStart(5, '0')}`;
 
   return [tleLine1, tleLine2];
-}
+}//+
 // Вспомогательная функция для преобразования радиан в градусы
 function radToDeg(radians) {
   let degrees = (radians * 180) / Math.PI;
   return ((degrees % 360) + 360) % 360;  // Нормализует даже отрицательные углы
-}
+}//+
 function renderPopup(popupElement,message){
   const div = document.createElement("div");
   const p=document.createElement("p");
@@ -286,7 +286,7 @@ function renderPopup(popupElement,message){
     popupElement.classList.remove('popup')
     popupElement.close()
   },5000)
-}
+}//+
 function  parseKepToObject(keplerStr){
   const parts = keplerStr
       .split(';')
@@ -551,7 +551,7 @@ function parseKeplerianString(keplerStr) {
     bstar: bstar,
     mean_motion_dot: meanMotionDot,
   };
-}
+}//+
 
 function stateVectorToKeplerian(position, velocity, mu =398600.4418) {
   /** Преобразует вектор состояния в кеплеровские элементы */
@@ -614,7 +614,7 @@ function stateVectorToKeplerian(position, velocity, mu =398600.4418) {
     argp: argp,
     nu: nu
   };
-}
+}//+
 function viewDefaulTles(){
   const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
   getKaDefault(selectedValue,'TLE').then(data=>{
@@ -700,7 +700,7 @@ function keplerToTLE(){
   console.log('tle.trimEnd()',tle.trimEnd())
   arr = readLinesValue(tle.trimEnd(),{},'get_TLE');
   document.getElementById('task-btn-TLE').disabled=false;
-}
+}//+
 function viewDefaulBc(){
   const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
   getKaDefault(selectedValue,'BC').then(data=>{
@@ -717,7 +717,7 @@ function viewDefaulBc(){
     document.querySelector('.input-file-text').innerHTML=`Наименование файла: БЦ по умолчанию `;
     document.getElementById('task-btn-TLE').disabled=false;
   });
-}
+}//+-
 async function getKaDefault(url,typeFile){
   try {
     const response = await fetch(`http://${url}/service/ka_default_file?type=${typeFile}&ist=73`, {
@@ -732,11 +732,11 @@ async function getKaDefault(url,typeFile){
   catch (error) {
     console.error("Error add row:", error);
   }
-}
+}//+
 
 function convertLineEndings(text) {
   return text.replace(/\n/g, '\r\n');
-}
+}//+
 function  viewKeplerDatas(keplerDatas){
   const arrKepler =keplerDatas.split('\r\n');
   arrKepler.forEach(keplerData=>{
@@ -788,7 +788,7 @@ function  viewKeplerDatas(keplerDatas){
       parseAndDisplayKeplerData(kepler_str,i+1);
     })
 
-}
+}//+
 function getRandomNumber(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
@@ -820,7 +820,7 @@ function getDateTime() {
    
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
-}
+}//+
 function showBegLogRequest(arrClassTlEs,selector,idElement){
   document.querySelector(`${selector}`).innerHTML+=`<br><span class='header-log'>Начало сеанса: ${new Date().toLocaleString()}</span>`;
   const c=document.querySelector('.input-file-text');
@@ -836,7 +836,7 @@ function showBegLogRequest(arrClassTlEs,selector,idElement){
 
   }
   document.querySelector(selector).innerHTML+=`<br><div>Время начала отправки данных БД: ${new Date().toLocaleString()}</div>`;
-}
+}//+
 function showEndLogRequest(selector){
   const logIn=document.createElement('div');
   logIn.innerHTML+=`<br>`;
@@ -856,7 +856,7 @@ function showEndLogRequest(selector){
     }
   }, 300)
 
-}
+}//+
 function readLines(fileReader) {
   document.querySelector('.column2_TLE-view').innerHTML=``;
   const arrTLE=[];
@@ -881,7 +881,7 @@ function readLines(fileReader) {
     
   
   console.log(arrTLE)
-}
+}//+
 function readLinesValue(fileReader,keplerData,idElement,flag=true) {
   let tle= new dataTle();
   let jsonTLE={};
@@ -929,12 +929,12 @@ function readLinesValue(fileReader,keplerData,idElement,flag=true) {
   }
   return arrClassTlEs
 
-}
+}//+
 // example usage: realtime clock
 setInterval(function(){
   let currentTime = getDateTime();
   document.getElementById("timer").innerHTML = currentTime;
-}, 0);
+}, 0);//+
 function processLine(line,count_line,jsonTLE,tle) {
   let dataTLE;
   const arrTLENames=['Номер строки_1','KOD_NORAD',
@@ -1327,7 +1327,7 @@ function processLine(line,count_line,jsonTLE,tle) {
   }
   
  
-}
+}//+
 function parseAndDisplayKeplerData(inputString,i) {
   const outputElement = document.getElementById('convert-kepler');
   if (!outputElement) {
@@ -1494,7 +1494,7 @@ function parseAndDisplayKeplerData(inputString,i) {
     outputElement.innerHTML = `<p style="color: red;">Ошибка при обработке данных</p>`;
     console.error('Ошибка парсинга:', error);
   }
-}
+}//+
 async function postKA(data,url){
   try {
     const response = await fetch(`http://${url}/ka?ist=73`, {
@@ -1511,7 +1511,7 @@ async function postKA(data,url){
   catch (error) {
     console.error("Error add row:", error);
   }
-}
+}//+
 function eventSend(){
   const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
   console.log(selectedValue)
@@ -1551,9 +1551,7 @@ function eventSend(){
   document.getElementById('task-btn-TLE').disabled=true;
 }
 let arr=[];
-function logKepler(keplerData){
 
-}
 
 document.addEventListener('DOMContentLoaded',function(){
   // const kepler_str ='НУ01:134,2,0,10,1;1.134,1,8533;2.08.09.2024;3.17.00.05.982;4.-7724.598152+00;5.-1609.364940+00;6.0.000000+00;7.0.073185+00;8.-0.342691+00;9.7.041358+00;10.0.050000+00;11.0.0000000+00;12.020000000,0;'

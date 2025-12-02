@@ -2,8 +2,9 @@
  * Отображает промежуточные параметры кеплеровских строк формата НУ.
  * @param {Object} keplerElements -объект с промежуточными параметрами вычислений кеплеровских значений.
  * @param {String} idElement - id DOM элемента для рендеринга.
+ * @param {Number} i - индекс КА.
  */
-export function viewKeplerIntermediateParameters(keplerElements,idElement){
+export function viewKeplerIntermediateParameters(keplerElements,idElement,i){
     const rusNamesKepler={
         e:'Эксцентриситет ',
         a:'Большая полуось (км)',

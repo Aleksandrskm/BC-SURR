@@ -91,7 +91,7 @@ export class KeplerView{
     /**
      * создает ВКП фразу кеплеровской строки.
      * @param {Array} dataParts - данные кеплеровской строки.
-     * @param {Element} htmlOutput - элемент для записи данных.
+     * @param {String} htmlOutput - элемент для записи данных.
      */
     #createVkpPhrase(dataParts,htmlOutput){
         const vkpLabels = [
@@ -240,10 +240,8 @@ export class KeplerView{
         keplerStrs.forEach((keplerStr,i)=>{
             const keplerValue = keplerStr.value;
             const updatedKeplerElements = parserKepler.parseLinesKepler(keplerValue);
-            viewKeplerIntermediateParameters(updatedKeplerElements,'#data-kepler')
+            viewKeplerIntermediateParameters(updatedKeplerElements,'#data-kepler',i)
             KeplerView.#renderKeplerData(keplerValue,i+1);
         })
-
     }
-
 }

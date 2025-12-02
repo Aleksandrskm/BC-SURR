@@ -463,9 +463,9 @@ export class TleParser{
     /**
      * получение TLE строки из кеплеровских параметров.
      * @param  { Object } updatedKeplerElements - документ содержащий все данные TLE.
-     * @param  { Number } indexLKa - документ содержащий все данные TLE.
+     * @param  { Number } indexTleKa - документ содержащий все данные TLE.
      */
-    getTleLinesFromKepler(updatedKeplerElements,indexLKa){
+    getTleLinesFromKepler(updatedKeplerElements,indexTleKa){
         const namesTleKA = {
             0: 'GONETS-M1 1-1',
             1: 'GONETS-M1 1-2',
@@ -497,7 +497,7 @@ export class TleParser{
             27: 'GONETS-M1 4-7'
         };
         const [tle1,tle2] = this.#generateTLEFromKeplerian(updatedKeplerElements);
-        const nameTleKa=namesTleKA[indexLKa];
+        const nameTleKa=namesTleKA[indexTleKa];
         return `${nameTleKa}\r\n${tle1}\r\n${tle2}\r\n`;
     }
 }
