@@ -1,3 +1,9 @@
+/**
+ * Функция получает с сервера данные либо TLE, либо BC форматов.
+ *
+ * @param {String} url - url адрес сервера.
+ * @param {String} typeFile - тип получаемого файла либо TLE, либо BC.
+ * */
 export async function getKaDefault(url,typeFile){
     try {
         const response = await fetch(`http://${url}/service/ka_default_file?type=${typeFile}&ist=73`, {

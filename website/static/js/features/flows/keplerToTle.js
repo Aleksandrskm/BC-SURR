@@ -1,6 +1,9 @@
 import {TleParser} from '../parsers/TleParser.js';
 import {KeplerParser} from "../parsers/KeplerParser.js";
 import {viewTleData} from "../../components/tle/TleView.js";
+/**
+ * Функция преобразует и отображает кеплеровские строки в TLE формате
+ * */
 export function keplerToTLE(){
     const parserTle = new TleParser();
     const parserKepler = new KeplerParser();

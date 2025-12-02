@@ -2,6 +2,9 @@ import {getKaDefault} from "../api/getKaDefault.js";
 import {convertLineEndings} from "../../utils/converLineEndings.js";
 import {viewTleData} from "../../components/tle/TleView.js";
 import {editFileName} from "../../components/EditFileName.js";
+/**
+ * Функция получает с сервера стандартные значения TLE строк и отображает их.
+ * */
 export function viewDefaulTles(){
     const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
     getKaDefault(selectedValue,'TLE').then(data=>{

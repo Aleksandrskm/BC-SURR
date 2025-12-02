@@ -3,6 +3,9 @@ import {convertLineEndings} from "../../utils/converLineEndings.js";
 import {keplerToTLE} from "./keplerToTle.js";
 import {editFileName} from "../../components/EditFileName.js";
 import {getKaDefault} from "../api/getKaDefault";
+/**
+ * Функция получает с сервера стандартные значения кеплеровских строк и отображает их в кеплеровском и TLE форматах.
+ * */
 export function viewDefaulBc(){
     const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
     getKaDefault(selectedValue,'BC').then(data=>{

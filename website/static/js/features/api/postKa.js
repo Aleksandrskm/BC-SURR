@@ -1,3 +1,9 @@
+/**
+ * Функция отправки данных КА на сервер.
+ *
+ * @param {Object} data - тело запроса со всеми данными.
+ * @param {String} url - url адрес сервера.
+ * */
 export async function postKA(data,url){
     try {
         const response = await fetch(`http://${url}/ka?ist=73`, {

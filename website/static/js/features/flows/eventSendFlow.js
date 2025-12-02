@@ -3,8 +3,12 @@ import {renderPopup} from "../../components/Popup.js";
 import {LogView} from "../../components/LogView.js";
 import {postKA} from "../api/postKa.js";
 import {recalculateKas} from "../api/recalculateKas.js";
+/**
+ * Функция отправляет распаршенные данные по всем КА и после отправки пересчитывает по этим данным значения на сервере.
+ * */
 export function eventSend(){
     const parserTle=    new TleParser();
+    let arr;
     const selectedValue = document.querySelector('input[name="type_bd"]:checked').value;
     let idElem='';
     if (document.getElementById('BC-document').innerHTML===''){

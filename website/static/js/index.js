@@ -127,7 +127,7 @@ function formatDateToCustomString(date) {
   const microseconds = milliseconds.padEnd(6, '0');
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${microseconds}`;
-}
+}//+
 function generateTLEFromKeplerian(keplerParams) {
   /** Генерирует валидный TLE из кеплеровских параметров с проверкой границ */
   let {
@@ -633,7 +633,7 @@ function viewDefaulTles(){
     document.querySelector('.input-file-text').innerHTML=`Наименование файла: TLE по умолчанию`;
     document.getElementById('task-btn-TLE').disabled=false;
   });
-}
+}//+-
 function keplerToTLE(){
   document.getElementById('data-document').innerHTML=``;
   // document.getElementById('data-kepler').innerHTML=``;
@@ -1549,7 +1549,7 @@ function eventSend(){
   })
   console.log(arr,'arr');
   document.getElementById('task-btn-TLE').disabled=true;
-}
+}//+-
 let arr=[];
 
 

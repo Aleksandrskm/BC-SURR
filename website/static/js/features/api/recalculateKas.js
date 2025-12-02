@@ -1,3 +1,8 @@
+/**
+ * Функция пересчета данных по КА на сервере.
+ *
+ * @param {String} url - url адрес сервера.
+ * */
 export async function recalculateKas(url){
     try {
         const response = await fetch(`http://${url}/ka/recalculate`, {
