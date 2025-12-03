@@ -198,7 +198,7 @@ export class KeplerView{
      * @param {String} inputString - данные  значений кеплеровской строки.
      * @param {Number} i - номер строки.
      */
-    #renderKeplerData(inputString,i) {
+      #renderKeplerData(inputString,i) {
         const outputElement = document.getElementById('convert-kepler');
         if (!outputElement) {
             console.error('Элемент с id="convert-kepler" не найден');
@@ -231,7 +231,7 @@ export class KeplerView{
      * отображает все данные кеплеровской строк.
      * @param {String} keplerDatas - данные значений кеплеровской строк.
      */
-    static  viewKeplerData(keplerDatas){
+      viewKeplerData(keplerDatas){
         const arrKepler =splitKeplerLines(keplerDatas);
         const parserKepler = new KeplerParser();
         renderKeplerTextareas(arrKepler,'BC-document')
@@ -241,7 +241,8 @@ export class KeplerView{
             const keplerValue = keplerStr.value;
             const updatedKeplerElements = parserKepler.parseLinesKepler(keplerValue);
             viewKeplerIntermediateParameters(updatedKeplerElements,'#data-kepler',i)
-            KeplerView.#renderKeplerData(keplerValue,i+1);
+            console.log('keplerValue type',typeof keplerValue)
+            this.#renderKeplerData(keplerValue,i+1);
         })
     }
 }

@@ -1,4 +1,5 @@
 import {DataTle} from "../../models/DataTle.js";
+import {radToDeg} from "../../utils/radToDeg.js";
 export class TleParser{
     constructor(){}
 
@@ -435,7 +436,7 @@ export class TleParser{
             if (countLine===3) {
                 countLine=0
                 arrClassTlEs.push(tle);
-                tle=new dataTle();
+                tle=new DataTle();
             }
             this.#parseTLELine(line,countLine,tle);
             countLine++;
