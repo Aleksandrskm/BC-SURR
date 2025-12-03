@@ -1,8 +1,11 @@
 
-import { handleTextFiles } from "../../../components/FileInput.js";
-import {TleParser} from "../../parsers/TleParser.js";
-import {renderTleTextareas} from "../../../components/tle/TleTextareaList.js";
-
+import { handleTextFiles } from "../../components/FileInput.js";
+import {TleParser} from "../parsers/TleParser.js";
+import {renderTleTextareas} from "../../components/tle/TleTextareaList.js";
+/**
+ * Функция обработки, парса и отображения TLE файла.
+ * @param {Event} e -ивент при обработке файла.
+ * */
 export function onTlesFileChange(e) {
     const parser = new TleParser();
     handleTextFiles(e, (text, file) => {

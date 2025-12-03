@@ -1,7 +1,10 @@
-import {KeplerView} from "../../../components/kepler/KeplerView.js";
-import {keplerToTLE} from "../keplerToTle.js";
-import {handleTextFiles} from "../../../components/FileInput.js";
-
+import {KeplerView} from "../../components/kepler/KeplerView.js";
+import {keplerToTLE} from "./keplerToTle.js";
+import {handleTextFiles} from "../../components/FileInput.js";
+/**
+ * Функция обработки, парса и отображения Бц файла.
+ * @param {Event} e -ивент при обработке файла.
+ * */
 export function onBcFileChange(e) {
     handleTextFiles(e, (text, file) => {
         document.getElementById('bc-file').innerText = 'Содержание файла БЦ:';
