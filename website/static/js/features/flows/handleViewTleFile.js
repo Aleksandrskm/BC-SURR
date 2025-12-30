@@ -8,6 +8,7 @@ import {renderTleTextareas} from "../../components/tle/TleTextareaList.js";
  * */
 export function onViewTleFileChange(e) {
     const parser = new TleParser();
+    document.getElementById('data-document').innerHTML = '';
     handleTextFiles(e, (text, file) => {
         document.querySelector('.input-file-text').innerHTML =
             `Наименование файла: ${file.name}`;
